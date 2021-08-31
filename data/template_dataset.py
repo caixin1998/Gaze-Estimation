@@ -33,7 +33,7 @@ class TemplateDataset(BaseDataset):
         parser.set_defaults(max_dataset_size=10, new_dataset_option=2.0)  # specify dataset-specific default values
         return parser
 
-    def __init__(self, opt):
+    def __init__(self, opt, split):
         """Initialize this dataset class.
 
         Parameters:

@@ -3,6 +3,7 @@ import torch
 from collections import OrderedDict
 from abc import ABC, abstractmethod
 from . import networks
+from ..util.util import AverageMeters
 
 
 class BaseModel(ABC):
@@ -88,12 +89,28 @@ class BaseModel(ABC):
             self.load_networks(load_suffix)
         self.print_networks(opt.verbose)
 
+    
+    def train(self):
+        """Make models train mode during training time"""
+        self.reset_loss()
+        for name in self.model_names:
+            if isinstance(name, str):
+                net = getattr(self, 'net' + name)
+                net.train()
+
     def eval(self):
         """Make models eval mode during test time"""
+        self.reset_loss()
         for name in self.model_names:
             if isinstance(name, str):
                 net = getattr(self, 'net' + name)
                 net.eval()
+
+    def reset_loss(self):
+        """reset average loss before train and eval"""
+        for name in self.loss_names:
+            if isinstance(name, str):
+                getattr(self, name).reset()
 
     def test(self):
         """Forward function used in test time.

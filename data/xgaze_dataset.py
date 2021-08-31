@@ -46,7 +46,7 @@ class XGazeDataset(BaseDataset):
         parser.set_defaults(max_dataset_size=10, new_dataset_option=2.0)
         return parser
 
-    def __init__(self, opt):
+    def __init__(self, opt, split):
         """Initialize this dataset class.
 
         Parameters:
@@ -59,11 +59,12 @@ class XGazeDataset(BaseDataset):
         """
         # save the option and dataset root
         BaseDataset.__init__(self, opt)
+        self.split = split
+        self.opt = opt
         self.key_to_use = read_json(self.root)
         # get the image paths of your dataset;
-
         for num_i in range(0, len(self.selected_keys)):
-            file_path = os.path.join(self.path, self.split, self.selected_keys[num_i])
+            file_path = os.path.join(self.root, self.split, self.selected_keys[num_i])
             self.hdfs[num_i] = h5py.File(file_path, 'r', swmr=True)
             # print('read file: ', os.path.join(self.path, self.selected_keys[num_i]))
             assert self.hdfs[num_i].swmr_mode
