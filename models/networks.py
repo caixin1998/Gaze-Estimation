@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.nn import init
 import functools
 from torch.optim import lr_scheduler
-
+from modules import *
 
 ###############################################################################
 # Helper Functions
@@ -86,6 +86,7 @@ def init_weights(net, init_type='normal', init_gain=0.02):
                 init.kaiming_normal_(m.weight.data, a=0, mode='fan_in')
             elif init_type == 'orthogonal':
                 init.orthogonal_(m.weight.data, gain=init_gain)
+        
             else:
                 raise NotImplementedError('initialization method [%s] is not implemented' % init_type)
             if hasattr(m, 'bias') and m.bias is not None:
@@ -95,6 +96,7 @@ def init_weights(net, init_type='normal', init_gain=0.02):
             init.constant_(m.bias.data, 0.0)
 
     print('initialize network with %s' % init_type)
+ 
     net.apply(init_func)  # apply the initialization function <init_func>
 
 
@@ -112,10 +114,17 @@ def init_net(net, init_type='normal', init_gain=0.02, gpu_ids=[]):
         assert(torch.cuda.is_available())
         net.to(gpu_ids[0])
         net = torch.nn.DataParallel(net, gpu_ids)  # multi-GPUs
-    init_weights(net, init_type, init_gain=init_gain)
+    if init_type is not None:
+        init_weights(net, init_type, init_gain=init_gain)
     return net
 
-
+def define_GazeNetwork(netGaze = "regressor", backbone = "resnet50", ngf = 256, gpu_ids = []):
+    if netGaze == "regressor":
+        net = GazeNetwork(backbone,ngf)
+    else:
+        raise NotImplementedError('Generator model name [%s] is not recognized' % netGaze)
+    return init_net(net, None, None, gpu_ids)
+  
 def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, init_type='normal', init_gain=0.02, gpu_ids=[]):
     """Create a generator
 
@@ -613,3 +622,18 @@ class PixelDiscriminator(nn.Module):
     def forward(self, input):
         """Standard forward."""
         return self.net(input)
+
+class GazeNetwork(nn.module):
+    def __init__(self, backbone = "resnet50", feat_nc = 256):
+        super(GazeNetwork, self).__init__()
+        if backbone == "resnet50":
+            self.model = resnet50(pretrained=True)
+
+        self.gaze_fc = nn.Sequential(
+            nn.Linear(2048, feat_nc),
+            nn.ReLU(inplace = True),
+            nn.Linear(feat_nc, 2),
+        )
+
+    def forward(self, x): 
+        x = self.model(x)
