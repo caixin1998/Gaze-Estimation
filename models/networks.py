@@ -118,12 +118,12 @@ def init_net(net, init_type='normal', init_gain=0.02, gpu_ids=[]):
         init_weights(net, init_type, init_gain=init_gain)
     return net
 
-def define_GazeNetwork(netGaze = "regressor", backbone = "resnet50", ngf = 256, gpu_ids = []):
+def define_GazeNetwork(netGaze = "regressor", backbone = "resnet50", ngf = 256):
     if netGaze == "regressor":
         net = GazeNetwork(backbone,ngf)
     else:
         raise NotImplementedError('Generator model name [%s] is not recognized' % netGaze)
-    return init_net(net, None, None, gpu_ids)
+    return net
   
 def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, init_type='normal', init_gain=0.02, gpu_ids=[]):
     """Create a generator
@@ -623,7 +623,7 @@ class PixelDiscriminator(nn.Module):
         """Standard forward."""
         return self.net(input)
 
-class GazeNetwork(nn.module):
+class GazeNetwork(nn.Module):
     def __init__(self, backbone = "resnet50", feat_nc = 256):
         super(GazeNetwork, self).__init__()
         if backbone == "resnet50":
@@ -636,4 +636,6 @@ class GazeNetwork(nn.module):
         )
 
     def forward(self, x): 
-        x = self.model(x)
+        x = self.model(x["face"])
+        x = self.gaze_fc(x)
+        return x

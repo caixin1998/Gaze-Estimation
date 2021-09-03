@@ -13,7 +13,9 @@ See our template dataset class 'template_dataset.py' for more details.
 import importlib
 import torch.utils.data
 from data.base_dataset import BaseDataset
-from ..util.data_util import *
+
+
+from pytorch_lightning import LightningDataModule
 
 def find_dataset_using_name(dataset_name):
     """Import the module "data/[dataset_name]_dataset.py".
@@ -44,50 +46,34 @@ def get_option_setter(dataset_name):
     return dataset_class.modify_commandline_options
 
 
-def create_dataset(opt):
-    """Create a dataset given the option.
-
-    This function wraps the class CustomDatasetDataLoader.
-        This is the main interface between this package and 'train.py'/'test.py'
-
-    Example:
-        >>> from data import create_dataset
-        >>> dataset = create_dataset(opt)
-    """
-    data_loader = CustomDatasetDataLoader(opt)
-    dataset = data_loader.load_data()
-    return dataset
 
 
-class CustomDatasetDataLoader():
-    """Wrapper class of Dataset class that performs multi-threaded data loading"""
-
+class CustomDataModule(LightningDataModule):
     def __init__(self, opt):
-        """Initialize this class
-
-        Step 1: create a dataset instance given the name [dataset_mode]
-        Step 2: create a multi-threaded data loader.
-        """
+        super(CustomDataModule,self).__init__()
         self.opt = opt
-        dataset_class = find_dataset_using_name(opt.dataset_mode)
-        self.dataset = dataset_class(opt)
-        print("dataset [%s] was created" % type(self.dataset).__name__)
-        self.dataloader = torch.utils.data.DataLoader(
-            self.dataset,
-            batch_size=opt.batch_size,
-            shuffle=not opt.serial_batches,
-            num_workers=int(opt.num_threads))
+        self.dataset_class = find_dataset_using_name(opt.dataset)
 
-    def load_data(self):
-        return self
+    
+    def setup(self,stage):
+        self.train_dataset = self.dataset_class(self.opt, "train")
+        self.val_dataset = self.dataset_class(self.opt, "valid")
+        print("dataset [%s] was created" % type(self.train_dataset).__name__)
 
-    def __len__(self):
-        """Return the number of data in the dataset"""
-        return min(len(self.dataset), self.opt.max_dataset_size)
+    def train_dataloader(self):
+        print('The number of training images = %d' % len(self.train_dataset))
+        return torch.utils.data.DataLoader(
+            self.train_dataset,
+            batch_size=self.opt.batch_size,
+            shuffle=True,
+            num_workers=int(self.opt.num_threads))
+    
+    def val_dataloader(self):
+        print('The number of validation images = %d' % len(self.val_dataset))
+        return torch.utils.data.DataLoader(
+            self.val_dataset,
+            batch_size=self.opt.batch_size,
+            shuffle=False,
+            num_workers=int(self.opt.num_threads))
 
-    def __iter__(self):
-        """Return a batch of data"""
-        for i, data in enumerate(self.dataloader):
-            if i * self.opt.batch_size >= self.opt.max_dataset_size:
-                break
-            yield data
+

@@ -14,10 +14,10 @@ You need to implement the following functions:
 from data.base_dataset import BaseDataset, get_transform
 # from data.image_folder import make_dataset
 # from PIL import Image
-
+import random
 import os,h5py
 import numpy as np
-
+from util.data_util import read_json
 class XGazeDataset(BaseDataset):
     """A template dataset class for you to implement custom datasets."""
     @staticmethod
@@ -31,19 +31,13 @@ class XGazeDataset(BaseDataset):
         Returns:
             the modified parser.
         """
-    
         parser.add_argument('--new_dataset_option', type=float, default=1.0, help='new dataset option')
+
       
-        parser.set_defaults(max_dataset_size=10, new_dataset_option=2.0)  # specify dataset-specific default values
-        if is_train:
-            parser.add_argument('--split', type=str, default="train", help='dataset split,eg: train, valid, test')
-        else:
-            parser.add_argument('--split', type=str, default="valid", help='dataset split,eg: train, valid, test')
-        
         parser.add_argument('--index_file', type=str, default=None, help='mapping from full-data index to key and person-specific index')
         parser.add_argument('--cam_index', type=int, nargs='+', default=None, help='loading specific camera index for ethxgaze')
 
-        parser.set_defaults(max_dataset_size=10, new_dataset_option=2.0)
+        parser.set_defaults(max_dataset_size=None, new_dataset_option=2.0)  # specify dataset-specific default values
         return parser
 
     def __init__(self, opt, split):
@@ -61,17 +55,21 @@ class XGazeDataset(BaseDataset):
         BaseDataset.__init__(self, opt)
         self.split = split
         self.opt = opt
-        self.key_to_use = read_json(self.root)
+        self.hdfs = {}
+        self.root = opt.dataroot
+        self.key_to_use = read_json(self.root)[self.split]
+        self.selected_keys = [k for k in self.key_to_use]
         # get the image paths of your dataset;
         for num_i in range(0, len(self.selected_keys)):
             file_path = os.path.join(self.root, self.split, self.selected_keys[num_i])
+            # print(self.root, self.split)
             self.hdfs[num_i] = h5py.File(file_path, 'r', swmr=True)
             # print('read file: ', os.path.join(self.path, self.selected_keys[num_i]))
             assert self.hdfs[num_i].swmr_mode
     
         # Construct mapping from full-data index to key and person-specific index
         index_file = opt.index_file
-        cam_list = opt.cam_list
+        cam_list = opt.cam_index
         if index_file is None:
             self.idx_to_kv = []
             for num_i in range(0, len(self.selected_keys)):
@@ -86,7 +84,12 @@ class XGazeDataset(BaseDataset):
         else:
             print('load the file: ', index_file)
             self.idx_to_kv = np.loadtxt(index_file, dtype=np.int)
-
+        max_dataset_size = opt.max_dataset_size
+        if max_dataset_size is not None:
+            random.seed(max_dataset_size)
+            self.idx_to_kv = random.sample(self.idx_to_kv, max_dataset_size)
+            # print(self.idx_to_kv[:20])
+            random.seed(time.time())
         for num_i in range(0, len(self.hdfs)):
             if self.hdfs[num_i]:
                 self.hdfs[num_i].close()
@@ -114,10 +117,10 @@ class XGazeDataset(BaseDataset):
         """
 
         key, idx = self.idx_to_kv[index]
-        self.hdf = h5py.File(os.path.join(self.path, self.split, self.selected_keys[key]), 'r', swmr=True)
+        self.hdf = h5py.File(os.path.join(self.root, self.split, self.selected_keys[key]), 'r', swmr=True)
         face = self.hdf['face_patch'][idx,:]
         face = face[:, :, [2, 1, 0]]
+        face = self.transform(face)
         gaze_label = self.hdf['face_gaze'][idx, :]
-
         return {'face': face, 'gaze': gaze_label}
 

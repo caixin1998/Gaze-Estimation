@@ -4,7 +4,7 @@ import torch
 import numpy as np
 from PIL import Image
 import os
-
+import pytorch_lightning as pl
 
 def tensor2im(input_image, imtype=np.uint8):
     """"Converts a Tensor array into a numpy image array.
@@ -121,3 +121,12 @@ class AverageMeter(object):
         self.sum += val * n
         self.count += n
         self.avg = self.sum / self.count
+
+
+class SetupCallback(pl.callbacks.Callback):
+    def on_train_epoch_start(self, trainer, pl_module):
+        torch.backends.cudnn.benchmark = True
+        
+    def on_validation_epoch_start(self, trainer, pl_module):
+        # Disable CuDNN probing for variable length inference.
+        torch.backends.cudnn.benchmark = False
