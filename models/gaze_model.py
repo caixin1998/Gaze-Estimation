@@ -77,8 +77,13 @@ class GazeModel(BaseModel):
         if "reye" in input:
             self.reye = input['reye']
             self.net_input["reye"] = self.reye
+        if "ec" in input:
+            self.ec = input['ec']
+            self.net_input["ec"] = self.ec
         if "gaze" in input:
             self.output = input["gaze"]
+        if "gaze_pt" in input:
+            self.output = input["gaze_pt"]
         return self.net_input, self.output
 
     def forward(self, x):
@@ -120,7 +125,7 @@ class GazeModel(BaseModel):
         if batch_idx % self.opt.visual_freq == 0:
             self.visual_names = ["face"]
             self.get_current_visuals("valid", batch_idx)
-            
+
         return batch_dictionary
 
     def validation_step_end(self,outputs):

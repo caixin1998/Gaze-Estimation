@@ -121,6 +121,8 @@ def init_net(net, init_type='normal', init_gain=0.02, gpu_ids=[]):
 def define_GazeNetwork(netGaze = "regressor", backbone = "resnet50", ngf = 256):
     if netGaze == "regressor":
         net = GazeNetwork(backbone,ngf)
+    if netGaze == "iTracker":
+        net = ITrackerECModel(backbone)
     else:
         raise NotImplementedError('Generator model name [%s] is not recognized' % netGaze)
     return net
