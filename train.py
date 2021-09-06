@@ -6,6 +6,7 @@ from models import create_model
 import pytorch_lightning as pl
 from pytorch_lightning import Trainer
 from util.util import  SetupCallback
+from pytorch_lightning import loggers as pl_loggers
 if __name__ == '__main__':
 
     opt = TrainOptions().parse()   # get training options
@@ -16,7 +17,8 @@ if __name__ == '__main__':
     
     if opt.accelerator == 'ddp':
         opt.batch_size = int(opt.batch_size / max(1, opt.gpus))
-        opt.workers = int(opt.num_threads / max(1, opt.gpus))
+        opt.num_threads = int(opt.num_threads / max(1, opt.gpus))
+        opt.sync_batchnorm = True
   
     best_checkpoint_callback = pl.callbacks.ModelCheckpoint(filename='best-{epoch:02d}-{val_error:.4f}', monitor='val_error', save_last=True, mode='min')
 
@@ -31,7 +33,9 @@ if __name__ == '__main__':
 
     data = CustomDataModule(opt)
     model = create_model(opt)
-    trainer = Trainer.from_argparse_args(opt, callbacks=callbacks)
-
+    tb_logger = pl_loggers.TensorBoardLogger(save_dir = opt.default_root_dir, name="lightning_logs")
+    trainer = Trainer.from_argparse_args(opt, callbacks=callbacks, logger=tb_logger)
+    # trainer.logger.default_hp_metric = False
+    #auto_scale_batch_size = True
     trainer.fit(model, data)
 

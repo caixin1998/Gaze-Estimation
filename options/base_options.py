@@ -25,7 +25,7 @@ class BaseOptions():
 
         parser.add_argument('--seed', type=int, default=None, help='random seed for experiments.')
 
-        parser.add_argument('--accelerator', type=str, default="dp", help='accelerator  for experiments.')
+        parser.add_argument('--accelerator', type=str, default="ddp", help='accelerator  for experiments.')
 
         parser.add_argument('--suffix', default='', type=str, help='customized suffix: opt.name = opt.name + suffix: e.g., {model}_{netG}_size{load_size}')
 
@@ -54,8 +54,8 @@ class BaseOptions():
 
         #for dataloader
         parser.add_argument('--dataset', type=str, default='xgaze', help='chooses how datasets are loaded. [unaligned | aligned | single | colorization]')
-        parser.add_argument('--batch_size', type=int, default=64, help='input batch size')
-        parser.add_argument('--num_threads', default=4, type=int, help='# threads for loading data')
+        parser.add_argument('--batch_size', type=int, default=256, help='input batch size')
+        parser.add_argument('--num_threads', default=16, type=int, help='# threads for loading data')
 
 
         # for dataset
@@ -69,11 +69,13 @@ class BaseOptions():
 
         #for trainer
         parser.add_argument('--gpus', type=int, default=4, help='number of gpus')
+        
 
         parser.set_defaults(
         max_epochs=20,
         check_val_every_n_epoch=1,
         weights_summary='full',
+        log_every_n_steps=20,
 #         track_grad_norm=2,
         )
 

@@ -19,7 +19,7 @@ import torch
 from .base_model import BaseModel
 from . import networks
 from pytorch_lightning import LightningModule
-from torchmetrics import MeanSquaredError
+from metrics import MeanDistanceError,MeanAngularError
 class GazeModel(BaseModel):
     @staticmethod
     def modify_commandline_options(parser, is_train=True):
@@ -52,14 +52,18 @@ class GazeModel(BaseModel):
         
         opt = self.opt
         
-        self.logger.default_hp_metric = False
+        
         # define networks; you can use opt.isTrain to specify different behaviors for training and test.
         self.netGazeNetwork = networks.define_GazeNetwork(opt.netGaze, opt.backbone, opt.ngf)
 
         self.criterionLoss = torch.nn.L1Loss()
 
-        if opt.metric == "rmse":
-            self.metric = MeanSquaredError(squared = False)
+        if opt.metric == "distance":
+            self.train_metric = MeanDistanceError(dist_sync_on_step=True)
+            self.valid_metric = MeanDistanceError(dist_sync_on_step=True)
+        elif opt.metric == "angular":
+            self.train_metric = MeanAngularError(dist_sync_on_step=True)
+            self.valid_metric = MeanAngularError(dist_sync_on_step=True)
 
         self.model_names = ["GazeNetwork"]
     def set_input(self, input):
@@ -78,44 +82,56 @@ class GazeModel(BaseModel):
         return self.net_input, self.output
 
     def forward(self, x):
-        return self.netGazeNetwork(x)
+        output = self.netGazeNetwork(x)
+        return output
 
     def training_step(self, batch, batch_idx = 0):
         input, output = self.set_input(batch)
         output_pred = self(input)
         loss_train = self.criterionLoss(output, output_pred)
-        self.metric(output, output_pred)
 
         batch_dictionary = {
-            "loss": loss_train
+            "loss": loss_train,
+            'preds': output_pred.detach(), 'target': output.detach()
         }
-
 
         if batch_idx % self.opt.visual_freq == 0:
             self.visual_names = ["face"]
             self.get_current_visuals("train", batch_idx)
-
-        
-        self.log("train_loss", loss_train, on_step=True, on_epoch=True)
-        self.log("train_error", self.metric, on_step=True, prog_bar=True, on_epoch=True)
+   
 
         return batch_dictionary
 
+    def training_step_end(self,outputs):
+        self.train_metric(outputs['preds'], outputs['target'])
+        # print(outputs['preds'].device)
+        train_loss = torch.mean(outputs['loss'])
+        self.log("train_loss",train_loss, on_step=True, on_epoch=True)
+
+        self.log("train_error", self.train_metric, on_step=True, prog_bar=True, on_epoch=True)
+        return train_loss
 
     def validation_step(self, batch, batch_idx):
         input, output = self.set_input(batch)
         output_pred = self(input)
-        loss_val = self.criterionLoss(output, output_pred)
-        self.metric(output, output_pred)
-        
-        # self.log("val_loss", loss_val, on_step=True, on_epoch=True)
+        batch_dictionary = {
+            'preds': output_pred, 'target': output
+        }
+        if batch_idx % self.opt.visual_freq == 0:
+            self.visual_names = ["face"]
+            self.get_current_visuals("valid", batch_idx)
+            
+        return batch_dictionary
 
-        self.log("val_error", self.metric, on_step=True, prog_bar=True, on_epoch=True)
+    def validation_step_end(self,outputs):
+        self.valid_error = self.valid_metric(outputs['preds'], outputs['target'])
+        self.log("val_error", self.valid_metric, on_step=True, on_epoch=True)
+        self.log("hp_metric", self.valid_metric)
 
-    
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.netGazeNetwork.parameters(), lr=self.opt.lr, betas=(self.opt.beta1, 0.999))
     
         scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda epoch: 0.1 ** (epoch // 30))
 
         return [optimizer], [scheduler]
+
