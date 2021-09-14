@@ -19,7 +19,9 @@ import torch
 from .base_model import BaseModel
 from . import networks
 from pytorch_lightning import LightningModule
+import torchvision
 from metrics import MeanDistanceError,MeanAngularError
+from util.data_util import draw_point
 class GazeModel(BaseModel):
     @staticmethod
     def modify_commandline_options(parser, is_train=True):
@@ -56,7 +58,7 @@ class GazeModel(BaseModel):
         # define networks; you can use opt.isTrain to specify different behaviors for training and test.
         self.netGazeNetwork = networks.define_GazeNetwork(opt.netGaze, opt.backbone, opt.ngf)
 
-        self.criterionLoss = torch.nn.L1Loss()
+        self.criterionLoss = torch.nn.SmoothL1Loss()
 
         if opt.metric == "distance":
             self.train_metric = MeanDistanceError(dist_sync_on_step=True)
@@ -80,6 +82,10 @@ class GazeModel(BaseModel):
         if "ec" in input:
             self.ec = input['ec']
             self.net_input["ec"] = self.ec
+        if "gt_position" in input:
+            self.gt_position = input['gt_position']
+        if "ec_position" in input:
+            self.ec_position = input['ec_position'] 
         if "gaze" in input:
             self.output = input["gaze"]
         if "gaze_pt" in input:
@@ -94,21 +100,34 @@ class GazeModel(BaseModel):
         input, output = self.set_input(batch)
         output_pred = self(input)
         loss_train = self.criterionLoss(output, output_pred)
-
+        # print(output, output_pred)
         batch_dictionary = {
             "loss": loss_train,
             'preds': output_pred.detach(), 'target': output.detach()
         }
+        # if torch.isnan(input["face"].any()):
+        #     print("?????????")
+        #     print("ecs:",batch["ec"],"\n","idx:", batch["index"])
+        #     print("?????????")
+            
+        if torch.any(loss_train > 1000):
+            print(torch.where(abs(output[:,0]) > 1000))
+            i = int(torch.where(abs(output[:,0]) > 1000)[0])
+            print("idx:", batch["index"][0][i],batch["index"][2][i],"\n",input["ec"][i], output[i],output_pred[i])
+            torchvision.utils.save_image(input["face"][i],"error_input.png", normalize=True)
 
-        if batch_idx % self.opt.visual_freq == 0:
+        if batch_idx % self.opt.visual_freq == 0 or (loss_train > 1000):
             self.visual_names = ["face"]
+            if self.opt.debug:
+                self.visual_names += ["gt_position", "ec_position"]
             self.get_current_visuals("train", batch_idx)
-   
 
         return batch_dictionary
 
     def training_step_end(self,outputs):
-        self.train_metric(outputs['preds'], outputs['target'])
+        metric = self.train_metric(outputs['preds'], outputs['target'])
+        # if torch.any(abs(metric > 100)):
+        #     print(outputs['preds'], outputs['target'])
         # print(outputs['preds'].device)
         train_loss = torch.mean(outputs['loss'])
         self.log("train_loss",train_loss, on_step=True, on_epoch=True)
@@ -122,8 +141,16 @@ class GazeModel(BaseModel):
         batch_dictionary = {
             'preds': output_pred, 'target': output
         }
+        output_pred_np = output_pred.detach().cpu().numpy()
+        self.pred_position = torch.zeros_like(self.gt_position)
+        for i, pred in enumerate(output_pred_np):
+            # print(pred, output[i])
+            pred = [pred[0] / 53.15, pred[1] / 29.9]
+            self.pred_position[i] = torch.tensor(draw_point(pred))
         if batch_idx % self.opt.visual_freq == 0:
             self.visual_names = ["face"]
+            if self.opt.debug:
+                self.visual_names += ["gt_position", "ec_position", "pred_position"]
             self.get_current_visuals("valid", batch_idx)
 
         return batch_dictionary

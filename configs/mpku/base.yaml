@@ -2,23 +2,16 @@ accelerator: ddp
 backbone: resnet50
 batch_size: 128
 beta1: 0.5
-cam_index: null
-check_val_every_n_epoch: 1
+
 checkpoints_dir: ./logs
 dataroot: /home1/caixin/GazeData/MPKUOutput
 dataset: mpku
 flip: false
 gpus: 4
-isTrain: true
-log_every_n_steps: 20
-lr: 0.0002
-max_dataset_size: null
-max_epochs: 20
-metric: angular
+lr: 0.0001
+metric: distance
 model: gaze
 netGaze: iTracker
-phase: train
 suffix: ''
-sync_batchnorm: true
-visual_freq: 400
-weights_summary: full
+visual_freq: 20
+

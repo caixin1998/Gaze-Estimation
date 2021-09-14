@@ -1,4 +1,4 @@
-import argparse
+import configargparse
 import os
 from util import util
 import torch
@@ -13,14 +13,14 @@ class BaseOptions():
     It also gathers additional options defined in <modify_commandline_options> functions in both dataset class and model class.
     """
 
-    def __init__(self):
+    def __init__(self, filename=None):
         """Reset the class; indicates the class hasn't been initailized"""
         self.initialized = False
-
+        self.filename = filename
     def initialize(self, parser):
         """Define the common options that are used in both training and test."""
         # basic parameters
-  
+        parser.add_argument('-c', '--config', required=False, is_config_file=True, help='config file path', default = self.filename)
         parser.add_argument('--name', type=str, default='gaze_estimation', help='name of the experiment. It decides where to store samples and models')
 
         parser.add_argument('--seed', type=int, default=None, help='random seed for experiments.')
@@ -69,13 +69,15 @@ class BaseOptions():
 
         #for trainer
         parser.add_argument('--gpus', type=int, default=4, help='number of gpus')
-        
+        parser.add_argument('--resume_from_checkpoint', type= str, default = None, help='resume_from_checkpoint and recover the whole training for Trainer.')
 
         parser.set_defaults(
         max_epochs=20,
         check_val_every_n_epoch=1,
         weights_summary='full',
         log_every_n_steps=20,
+        terminate_on_nan = True,
+        gradient_clip_val=1.0,
 #         track_grad_norm=2,
         )
 
@@ -93,7 +95,7 @@ class BaseOptions():
         in model and dataset classes.
         """
         if not self.initialized:  # check if it has been initialized
-            parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+            parser = configargparse.ArgumentParser(formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
             parser = self.initialize(parser)
 
         # get the basic options

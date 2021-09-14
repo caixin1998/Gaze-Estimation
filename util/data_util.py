@@ -1,6 +1,7 @@
 import os 
 import json
-
+import numpy as np 
+import cv2 as cv
 def read_json(data_dir):
     refer_list_file = os.path.join(data_dir, 'train_valid_split.json')
     print('load the train file list from: ', refer_list_file)
@@ -15,3 +16,17 @@ def handle_eyecorner_rectangle(pts,size):
     x1,x2,x3,x4 = x1 / w, x2 / w,x3 / w,x4 / w 
     y1,y2,y3,y4 = y1 / h, y2 / h,y3 / h,y4 / h
     return [x1,y1,x2,y2,x3,y3,x4,y4]
+
+def draw_point(pts,size = [192, 108]):
+    img = np.zeros((size[1],size[0]))
+    cv.rectangle(img, (0,0), (192,108), color = 1.0, thickness = 1)
+    pts = [pts[0] * size[0], pts[1] * size[1]]
+    try:
+        pts = np.array(pts, dtype=np.int)
+        img = cv.circle(img,pts,10,thickness = -1, color = 1.0)
+    except:
+        pass
+    # print(img.shape)
+    img = np.expand_dims(img, axis=0)
+    return img
+

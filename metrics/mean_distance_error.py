@@ -7,14 +7,18 @@ class MeanDistanceError(Metric):
         self.add_state("n_observations", torch.tensor(0), dist_reduce_fx = "sum")
 
     def update(self, preds, target):
-        self.sum_distance_errors += torch.sum(torch.sqrt(torch.sum((preds - target)**2, axis = 1)))
-        self.n_observations += preds.shape[0]
+        error = torch.sum(torch.sqrt(torch.sum((preds - target)**2, axis = 1)))
+        if error < 1e10:
+            self.sum_distance_errors += error
+            self.n_observations += preds.shape[0]
+        else:
+            self.n_observations += 1
     def compute(self):
         return self.sum_distance_errors / self.n_observations
 
 if __name__ == "__main__":
-    a = MDE()
-    preds = torch.randn(2,2)
+    a = MeanDistanceError()
+    preds = torch.randn(2,2) * 2e50
     target =  torch.zeros((2,2))
     a(preds,target)
     print(preds,a(preds,target))

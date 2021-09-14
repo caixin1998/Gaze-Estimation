@@ -31,6 +31,8 @@ class ItrackerFaceImageModel(nn.Module):
         super(ItrackerFaceImageModel, self).__init__()
         if backbone == "resnet50":
             self.model = resnet50(pretrained=True)
+        if backbone == "resnet18":
+            self.model = resnet18(pretrained=True)
         if backbone == "dilated":
             self.model = resnet50(pretrained=True, replace_stride_with_dilation = [True, True, True])
         elif backbone == "botnet":
@@ -62,8 +64,12 @@ class FaceImageModel(nn.Module):
     def __init__(self,backbone = "resnet50"):
         super(FaceImageModel, self).__init__()
         self.conv = ItrackerFaceImageModel(backbone = backbone)
+        if backbone == "resnet18":
+            ngf = 512
+        else:
+            ngf = 2048
         self.fc = nn.Sequential(
-            nn.Linear(2048, 128),
+            nn.Linear(ngf, 128),
             nn.ReLU(inplace=True),
             nn.Linear(128, 128),
             nn.ReLU(inplace=True),
@@ -205,6 +211,11 @@ class iTrackerECModel(nn.Module):
             nn.ReLU(inplace=True),
             nn.Linear(128 , 2),
             )
+        self.fc2 = nn.Sequential(
+            nn.Linear(128+128+128 , 128),
+            nn.ReLU(inplace=True),
+            nn.Linear(128 , 2),
+            )
 
     def forward(self, entry):
         # Eye nets
@@ -222,10 +233,12 @@ class iTrackerECModel(nn.Module):
         # Cat all
         if "leye" in entry and "reye" in entry:
             x = torch.cat((xEyes, xFace, xECorner), 1)
+            x = self.fc2(x)
+
         else:
             x = torch.cat((xFace, xECorner), 1)
+            x = self.fc(x)
 
-        x = self.fc(x)
         
         return x
 

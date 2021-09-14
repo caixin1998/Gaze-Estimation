@@ -1,0 +1,176 @@
+----------------- Options ---------------
+              accelerator: ddp                           
+                 backbone: resnet50                      
+               batch_size: 256                           
+                    beta1: 0.5                           
+  check_val_every_n_epoch: 1                             
+          checkpoints_dir: ./logs                        
+                   config: configs/mpku/base.yaml        	[default: None]
+          create_idx_file: False                         
+                 dataroot: /home1/caixin/GazeData/MPKUOutput	[default: /home/caixin/GazeData/xgaze_224]
+                  dataset: mpku                          	[default: xgaze]
+                     flip: False                         
+                     gpus: 4                             
+        gradient_clip_val: 1.0                           
+                 interval: 5                             
+                  isTrain: True                          	[default: None]
+        lambda_regression: 1.0                           
+        log_every_n_steps: 20                            
+                       lr: 0.0002                        
+         max_dataset_size: None                          
+               max_epochs: 20                            
+                   metric: distance                      	[default: angular]
+                    model: gaze                          
+                     name: gaze_estimation_mpku          	[default: gaze_estimation]
+                  netGaze: iTracker                      	[default: regressor]
+                      ngf: 128                           	[default: 128]
+              num_threads: 16                            
+                    phase: train                         
+               preprocess: none                          
+                     seed: 100                           	[default: None]
+                   suffix:                               
+         terminate_on_nan: True                          
+              visual_freq: 400                           
+          weights_summary: full                          
+----------------- End -------------------
+model [GazeModel] was created
+load the train file list from:  /home1/caixin/GazeData/MPKUOutput/train_valid_split.json
+load the file:  /home1/caixin/GazeData/MPKUOutput/train.txt
+load the train file list from:  /home1/caixin/GazeData/MPKUOutput/train_valid_split.json
+load the file:  /home1/caixin/GazeData/MPKUOutput/valid.txt
+dataset [MPKUDataset] was created
+Validation sanity check: 0it [00:00, ?it/s]----------------- Options ---------------
+              accelerator: ddp                           
+                 backbone: resnet50                      
+               batch_size: 256                           
+                    beta1: 0.5                           
+  check_val_every_n_epoch: 1                             
+          checkpoints_dir: ./logs                        
+                   config: configs/mpku/base.yaml        	[default: None]
+          create_idx_file: False                         
+                 dataroot: /home1/caixin/GazeData/MPKUOutput	[default: /home/caixin/GazeData/xgaze_224]
+                  dataset: mpku                          	[default: xgaze]
+                     flip: False                         
+                     gpus: 4                             
+        gradient_clip_val: 1.0                           
+                 interval: 5                             
+                  isTrain: True                          	[default: None]
+        lambda_regression: 1.0                           
+        log_every_n_steps: 20                            
+                       lr: 0.0002                        
+         max_dataset_size: None                          
+               max_epochs: 20                            
+                   metric: distance                      	[default: angular]
+                    model: gaze                          
+                     name: gaze_estimation_mpku          	[default: gaze_estimation]
+                  netGaze: iTracker                      	[default: regressor]
+                      ngf: 128                           	[default: 128]
+              num_threads: 16                            
+                    phase: train                         
+               preprocess: none                          
+                     seed: 100                           	[default: None]
+                   suffix:                               
+         terminate_on_nan: True                          
+              visual_freq: 400                           
+          weights_summary: full                          
+----------------- End -------------------
+model [GazeModel] was created
+load the train file list from:  /home1/caixin/GazeData/MPKUOutput/train_valid_split.json
+load the file:  /home1/caixin/GazeData/MPKUOutput/train.txt
+load the train file list from:  /home1/caixin/GazeData/MPKUOutput/train_valid_split.json
+load the file:  /home1/caixin/GazeData/MPKUOutput/valid.txt
+dataset [MPKUDataset] was created
+The number of validation images = 9831
+----------------- Options ---------------
+              accelerator: ddp                           
+                 backbone: resnet50                      
+               batch_size: 256                           
+                    beta1: 0.5                           
+  check_val_every_n_epoch: 1                             
+          checkpoints_dir: ./logs                        
+                   config: configs/mpku/base.yaml        	[default: None]
+          create_idx_file: False                         
+                 dataroot: /home1/caixin/GazeData/MPKUOutput	[default: /home/caixin/GazeData/xgaze_224]
+                  dataset: mpku                          	[default: xgaze]
+                     flip: False                         
+                     gpus: 4                             
+        gradient_clip_val: 1.0                           
+                 interval: 5                             
+                  isTrain: True                          	[default: None]
+        lambda_regression: 1.0                           
+        log_every_n_steps: 20                            
+                       lr: 0.0002                        
+         max_dataset_size: None                          
+               max_epochs: 20                            
+                   metric: distance                      	[default: angular]
+                    model: gaze                          
+                     name: gaze_estimation_mpku          	[default: gaze_estimation]
+                  netGaze: iTracker                      	[default: regressor]
+                      ngf: 128                           	[default: 128]
+              num_threads: 16                            
+                    phase: train                         
+               preprocess: none                          
+                     seed: 100                           	[default: None]
+                   suffix:                               
+         terminate_on_nan: True                          
+              visual_freq: 400                           
+          weights_summary: full                          
+----------------- End -------------------
+model [GazeModel] was created
+load the train file list from:  /home1/caixin/GazeData/MPKUOutput/train_valid_split.json
+load the file:  /home1/caixin/GazeData/MPKUOutput/train.txt
+load the train file list from:  /home1/caixin/GazeData/MPKUOutput/train_valid_split.json
+load the file:  /home1/caixin/GazeData/MPKUOutput/valid.txt
+dataset [MPKUDataset] was created
+The number of validation images = 9831
+----------------- Options ---------------
+              accelerator: ddp                           
+                 backbone: resnet50                      
+               batch_size: 256                           
+                    beta1: 0.5                           
+  check_val_every_n_epoch: 1                             
+          checkpoints_dir: ./logs                        
+                   config: configs/mpku/base.yaml        	[default: None]
+          create_idx_file: False                         
+                 dataroot: /home1/caixin/GazeData/MPKUOutput	[default: /home/caixin/GazeData/xgaze_224]
+                  dataset: mpku                          	[default: xgaze]
+                     flip: False                         
+                     gpus: 4                             
+        gradient_clip_val: 1.0                           
+                 interval: 5                             
+                  isTrain: True                          	[default: None]
+        lambda_regression: 1.0                           
+        log_every_n_steps: 20                            
+                       lr: 0.0002                        
+         max_dataset_size: None                          
+               max_epochs: 20                            
+                   metric: distance                      	[default: angular]
+                    model: gaze                          
+                     name: gaze_estimation_mpku          	[default: gaze_estimation]
+                  netGaze: iTracker                      	[default: regressor]
+                      ngf: 128                           	[default: 128]
+              num_threads: 16                            
+                    phase: train                         
+               preprocess: none                          
+                     seed: 100                           	[default: None]
+                   suffix:                               
+         terminate_on_nan: True                          
+              visual_freq: 400                           
+          weights_summary: full                          
+----------------- End -------------------
+model [GazeModel] was created
+load the train file list from:  /home1/caixin/GazeData/MPKUOutput/train_valid_split.json
+load the file:  /home1/caixin/GazeData/MPKUOutput/train.txt
+load the train file list from:  /home1/caixin/GazeData/MPKUOutput/train_valid_split.json
+load the file:  /home1/caixin/GazeData/MPKUOutput/valid.txt
+dataset [MPKUDataset] was created
+The number of validation images = 9831
+The number of validation images = 9831
+Validation sanity check:   0%|          | 0/2 [00:00<?, ?it/s]Validation sanity check:  50%|█████     | 1/2 [00:05<00:05,  5.27s/it]Validation sanity check: 100%|██████████| 2/2 [00:06<00:00,  3.92s/it]                                                                      The number of training images = 48832
+Training: -1it [00:00, ?it/s]Training:   0%|          | 0/230 [00:00<00:00, 19418.07it/s]The number of training images = 48832
+Epoch 0:   0%|          | 0/230 [00:00<00:00, 1877.49it/s]  The number of training images = 48832
+The number of training images = 48832
+Epoch 0:   0%|          | 1/230 [00:13<26:30,  6.95s/it]  Epoch 0:   0%|          | 1/230 [00:13<26:30,  6.95s/it, loss=23.5, v_num=18, train_error_step=34.50]Epoch 0:   1%|          | 2/230 [00:16<20:41,  5.45s/it, loss=23.5, v_num=18, train_error_step=34.50]Epoch 0:   1%|          | 2/230 [00:16<20:41,  5.45s/it, loss=22.6, v_num=18, train_error_step=34.10]Epoch 0:   1%|▏         | 3/230 [00:18<17:43,  4.69s/it, loss=22.6, v_num=18, train_error_step=34.10]Epoch 0:   1%|▏         | 3/230 [00:18<17:43,  4.69s/it, loss=23.1, v_num=18, train_error_step=35.10]Epoch 0:   2%|▏         | 4/230 [00:21<15:55,  4.23s/it, loss=23.1, v_num=18, train_error_step=35.10]Epoch 0:   2%|▏         | 4/230 [00:21<15:55,  4.23s/it, loss=23.1, v_num=18, train_error_step=35.10]Epoch 0:   2%|▏         | 5/230 [00:23<14:42,  3.92s/it, loss=23.1, v_num=18, train_error_step=35.10]Epoch 0:   2%|▏         | 5/230 [00:23<14:42,  3.92s/it, loss=22.9, v_num=18, train_error_step=34.50]Epoch 0:   3%|▎         | 6/230 [00:25<13:50,  3.71s/it, loss=22.9, v_num=18, train_error_step=34.50]Epoch 0:   3%|▎         | 6/230 [00:25<13:50,  3.71s/it, loss=22.5, v_num=18, train_error_step=32.70]Epoch 0:   3%|▎         | 7/230 [00:28<13:13,  3.56s/it, loss=22.5, v_num=18, train_error_step=32.70]Epoch 0:   3%|▎         | 7/230 [00:28<13:13,  3.56s/it, loss=22.8, v_num=18, train_error_step=35.30]Epoch 0:   3%|▎         | 8/230 [00:30<12:40,  3.43s/it, loss=22.8, v_num=18, train_error_step=35.30]Epoch 0:   3%|▎         | 8/230 [00:30<12:40,  3.43s/it, loss=22.7, v_num=18, train_error_step=35.00]Epoch 0:   4%|▍         | 9/230 [00:33<12:18,  3.34s/it, loss=22.7, v_num=18, train_error_step=35.00]Epoch 0:   4%|▍         | 9/230 [00:33<12:18,  3.34s/it, loss=22.9, v_num=18, train_error_step=35.40]Epoch 0:   4%|▍         | 10/230 [00:35<11:56,  3.26s/it, loss=22.9, v_num=18, train_error_step=35.40]Epoch 0:   4%|▍         | 10/230 [00:35<11:56,  3.26s/it, loss=22.8, v_num=18, train_error_step=34.80]Epoch 0:   5%|▍         | 11/230 [00:38<11:38,  3.19s/it, loss=22.8, v_num=18, train_error_step=34.80]Epoch 0:   5%|▍         | 11/230 [00:38<11:38,  3.19s/it, loss=22.8, v_num=18, train_error_step=34.20]Epoch 0:   5%|▌         | 12/230 [00:40<11:22,  3.13s/it, loss=22.8, v_num=18, train_error_step=34.20]Epoch 0:   5%|▌         | 12/230 [00:40<11:22,  3.13s/it, loss=22.7, v_num=18, train_error_step=32.80]Epoch 0:   6%|▌         | 13/230 [00:43<11:08,  3.08s/it, loss=22.7, v_num=18, train_error_step=32.80]Epoch 0:   6%|▌         | 13/230 [00:43<11:08,  3.08s/it, loss=22.6, v_num=18, train_error_step=34.10]Epoch 0:   6%|▌         | 14/230 [00:45<10:56,  3.04s/it, loss=22.6, v_num=18, train_error_step=34.10]Epoch 0:   6%|▌         | 14/230 [00:45<10:56,  3.04s/it, loss=22.5, v_num=18, train_error_step=32.80]Epoch 0:   7%|▋         | 15/230 [00:47<10:44,  3.00s/it, loss=22.5, v_num=18, train_error_step=32.80]Epoch 0:   7%|▋         | 15/230 [00:47<10:44,  3.00s/it, loss=22.5, v_num=18, train_error_step=33.00]Epoch 0:   7%|▋         | 16/230 [00:50<10:34,  2.96s/it, loss=22.5, v_num=18, train_error_step=33.00]Epoch 0:   7%|▋         | 16/230 [00:50<10:34,  2.96s/it, loss=22.4, v_num=18, train_error_step=31.90]Epoch 0:   7%|▋         | 17/230 [00:52<10:24,  2.93s/it, loss=22.4, v_num=18, train_error_step=31.90]Epoch 0:   7%|▋         | 17/230 [00:52<10:24,  2.93s/it, loss=22.3, v_num=18, train_error_step=31.40]Epoch 0:   8%|▊         | 18/230 [00:55<10:17,  2.91s/it, loss=22.3, v_num=18, train_error_step=31.40]Epoch 0:   8%|▊         | 18/230 [00:55<10:17,  2.91s/it, loss=22.2, v_num=18, train_error_step=31.20]Epoch 0:   8%|▊         | 19/230 [00:57<10:08,  2.88s/it, loss=22.2, v_num=18, train_error_step=31.20]Epoch 0:   8%|▊         | 19/230 [00:57<10:08,  2.88s/it, loss=22.1, v_num=18, train_error_step=31.30]Epoch 0:   9%|▊         | 20/230 [01:00<10:01,  2.86s/it, loss=22.1, v_num=18, train_error_step=31.30]Epoch 0:   9%|▊         | 20/230 [01:00<10:01,  2.86s/it, loss=22, v_num=18, train_error_step=32.80]  Epoch 0:   9%|▉         | 21/230 [01:02<09:55,  2.85s/it, loss=22, v_num=18, train_error_step=32.80]Epoch 0:   9%|▉         | 21/230 [01:02<09:55,  2.85s/it, loss=21.8, v_num=18, train_error_step=30.20]Epoch 0:  10%|▉         | 22/230 [01:05<09:48,  2.83s/it, loss=21.8, v_num=18, train_error_step=30.20]Epoch 0:  10%|▉         | 22/230 [01:05<09:48,  2.83s/it, loss=21.6, v_num=18, train_error_step=30.00]Epoch 0:  10%|█         | 23/230 [01:07<09:43,  2.82s/it, loss=21.6, v_num=18, train_error_step=30.00]Epoch 0:  10%|█         | 23/230 [01:07<09:43,  2.82s/it, loss=21.4, v_num=18, train_error_step=29.10]Epoch 0:  10%|█         | 24/230 [01:10<09:37,  2.80s/it, loss=21.4, v_num=18, train_error_step=29.10]Epoch 0:  10%|█         | 24/230 [01:10<09:37,  2.80s/it, loss=21.2, v_num=18, train_error_step=29.80]Epoch 0:  11%|█         | 25/230 [01:12<09:32,  2.79s/it, loss=21.2, v_num=18, train_error_step=29.80]Epoch 0:  11%|█         | 25/230 [01:12<09:32,  2.79s/it, loss=21, v_num=18, train_error_step=27.30]  Epoch 0:  11%|█▏        | 26/230 [01:14<09:26,  2.78s/it, loss=21, v_num=18, train_error_step=27.30]Epoch 0:  11%|█▏        | 26/230 [01:14<09:26,  2.78s/it, loss=20.8, v_num=18, train_error_step=25.90]Epoch 0:  12%|█▏        | 27/230 [01:17<09:21,  2.76s/it, loss=20.8, v_num=18, train_error_step=25.90]Epoch 0:  12%|█▏        | 27/230 [01:17<09:21,  2.76s/it, loss=20.5, v_num=18, train_error_step=26.90]Epoch 0:  12%|█▏        | 28/230 [01:19<09:16,  2.76s/it, loss=20.5, v_num=18, train_error_step=26.90]Epoch 0:  12%|█▏        | 28/230 [01:19<09:16,  2.76s/it, loss=20.1, v_num=18, train_error_step=25.70]Epoch 0:  13%|█▎        | 29/230 [01:22<09:11,  2.74s/it, loss=20.1, v_num=18, train_error_step=25.70]Epoch 0:  13%|█▎        | 29/230 [01:22<09:11,  2.74s/it, loss=19.7, v_num=18, train_error_step=25.60]Epoch 0:  13%|█▎        | 30/230 [01:24<09:06,  2.73s/it, loss=19.7, v_num=18, train_error_step=25.60]Epoch 0:  13%|█▎        | 30/230 [01:24<09:06,  2.73s/it, loss=19.4, v_num=18, train_error_step=25.90]Epoch 0:  13%|█▎        | 31/230 [01:27<09:02,  2.72s/it, loss=19.4, v_num=18, train_error_step=25.90]Epoch 0:  13%|█▎        | 31/230 [01:27<09:02,  2.72s/it, loss=19.2, v_num=18, train_error_step=23.20]Epoch 0:  14%|█▍        | 32/230 [01:29<08:58,  2.72s/it, loss=19.2, v_num=18, train_error_step=23.20]Epoch 0:  14%|█▍        | 32/230 [01:29<08:58,  2.72s/it, loss=18.9, v_num=18, train_error_step=23.20]Epoch 0:  14%|█▍        | 33/230 [01:32<08:54,  2.71s/it, loss=18.9, v_num=18, train_error_step=23.20]Epoch 0:  14%|█▍        | 33/230 [01:32<08:54,  2.71s/it, loss=18.5, v_num=18, train_error_step=23.20]Epoch 0:  15%|█▍        | 34/230 [01:34<08:50,  2.71s/it, loss=18.5, v_num=18, train_error_step=23.20]Epoch 0:  15%|█▍        | 34/230 [01:34<08:50,  2.71s/it, loss=18, v_num=18, train_error_step=22.20]  Epoch 0:  15%|█▌        | 35/230 [01:37<08:46,  2.70s/it, loss=18, v_num=18, train_error_step=22.20]Epoch 0:  15%|█▌        | 35/230 [01:37<08:46,  2.70s/it, loss=17.5, v_num=18, train_error_step=21.50]Epoch 0:  16%|█▌        | 36/230 [01:39<08:41,  2.69s/it, loss=17.5, v_num=18, train_error_step=21.50]Epoch 0:  16%|█▌        | 36/230 [01:39<08:41,  2.69s/it, loss=17.2, v_num=18, train_error_step=20.30]Epoch 0:  16%|█▌        | 37/230 [01:42<08:38,  2.68s/it, loss=17.2, v_num=18, train_error_step=20.30]Epoch 0:  16%|█▌        | 37/230 [01:42<08:38,  2.68s/it, loss=16.8, v_num=18, train_error_step=19.10]Epoch 0:  17%|█▋        | 38/230 [01:44<08:33,  2.68s/it, loss=16.8, v_num=18, train_error_step=19.10]Epoch 0:  17%|█▋        | 38/230 [01:44<08:33,  2.68s/it, loss=16.4, v_num=18, train_error_step=20.20]Epoch 0:  17%|█▋        | 39/230 [01:46<08:30,  2.67s/it, loss=16.4, v_num=18, train_error_step=20.20]Epoch 0:  17%|█▋        | 39/230 [01:46<08:30,  2.67s/it, loss=15.9, v_num=18, train_error_step=16.90]Epoch 0:  17%|█▋        | 40/230 [01:49<08:26,  2.67s/it, loss=15.9, v_num=18, train_error_step=16.90]Epoch 0:  17%|█▋        | 40/230 [01:49<08:26,  2.67s/it, loss=15.6, v_num=18, train_error_step=17.30]Epoch 0:  18%|█▊        | 41/230 [01:51<08:22,  2.66s/it, loss=15.6, v_num=18, train_error_step=17.30]Epoch 0:  18%|█▊        | 41/230 [01:51<08:22,  2.66s/it, loss=15, v_num=18, train_error_step=16.00]  Epoch 0:  18%|█▊        | 42/230 [01:54<08:18,  2.65s/it, loss=15, v_num=18, train_error_step=16.00]Epoch 0:  18%|█▊        | 42/230 [01:54<08:18,  2.65s/it, loss=14.6, v_num=18, train_error_step=15.30]Epoch 0:  19%|█▊        | 43/230 [01:56<08:15,  2.65s/it, loss=14.6, v_num=18, train_error_step=15.30]Epoch 0:  19%|█▊        | 43/230 [01:56<08:15,  2.65s/it, loss=14.1, v_num=18, train_error_step=14.90]Epoch 0:  19%|█▉        | 44/230 [01:59<08:12,  2.65s/it, loss=14.1, v_num=18, train_error_step=14.90]Epoch 0:  19%|█▉        | 44/230 [01:59<08:12,  2.65s/it, loss=13.6, v_num=18, train_error_step=14.60]Epoch 0:  20%|█▉        | 45/230 [02:01<08:08,  2.64s/it, loss=13.6, v_num=18, train_error_step=14.60]Epoch 0:  20%|█▉        | 45/230 [02:01<08:08,  2.64s/it, loss=13.1, v_num=18, train_error_step=16.00]Epoch 0:  20%|██        | 46/230 [02:03<08:04,  2.64s/it, loss=13.1, v_num=18, train_error_step=16.00]Epoch 0:  20%|██        | 46/230 [02:03<08:04,  2.64s/it, loss=12.9, v_num=18, train_error_step=17.10]Epoch 0:  20%|██        | 47/230 [02:06<08:01,  2.63s/it, loss=12.9, v_num=18, train_error_step=17.10]Epoch 0:  20%|██        | 47/230 [02:06<08:01,  2.63s/it, loss=12.4, v_num=18, train_error_step=15.00]Epoch 0:  21%|██        | 48/230 [02:08<07:58,  2.63s/it, loss=12.4, v_num=18, train_error_step=15.00]Epoch 0:  21%|██        | 48/230 [02:08<07:58,  2.63s/it, loss=12.2, v_num=18, train_error_step=15.80]Epoch 0:  21%|██▏       | 49/230 [02:11<07:54,  2.62s/it, loss=12.2, v_num=18, train_error_step=15.80]Epoch 0:  21%|██▏       | 49/230 [02:11<07:54,  2.62s/it, loss=11.9, v_num=18, train_error_step=14.80]Epoch 0:  22%|██▏       | 50/230 [02:13<07:51,  2.62s/it, loss=11.9, v_num=18, train_error_step=14.80]Epoch 0:  22%|██▏       | 50/230 [02:13<07:51,  2.62s/it, loss=11.5, v_num=18, train_error_step=12.50]Epoch 0:  22%|██▏       | 51/230 [02:16<07:48,  2.62s/it, loss=11.5, v_num=18, train_error_step=12.50]Epoch 0:  22%|██▏       | 51/230 [02:16<07:48,  2.62s/it, loss=11.1, v_num=18, train_error_step=13.80]Epoch 0:  23%|██▎       | 52/230 [02:18<07:45,  2.61s/it, loss=11.1, v_num=18, train_error_step=13.80]Epoch 0:  23%|██▎       | 52/230 [02:18<07:45,  2.61s/it, loss=10.9, v_num=18, train_error_step=16.70]Epoch 0:  23%|██▎       | 53/230 [02:21<07:42,  2.61s/it, loss=10.9, v_num=18, train_error_step=16.70]Epoch 0:  23%|██▎       | 53/230 [02:21<07:42,  2.61s/it, loss=10.7, v_num=18, train_error_step=14.80]Epoch 0:  23%|██▎       | 54/230 [02:23<07:39,  2.61s/it, loss=10.7, v_num=18, train_error_step=14.80]Epoch 0:  23%|██▎       | 54/230 [02:23<07:39,  2.61s/it, loss=10.5, v_num=18, train_error_step=14.00]Epoch 0:  24%|██▍       | 55/230 [02:25<07:35,  2.61s/it, loss=10.5, v_num=18, train_error_step=14.00]Epoch 0:  24%|██▍       | 55/230 [02:25<07:35,  2.61s/it, loss=10.4, v_num=18, train_error_step=13.10]Epoch 0:  24%|██▍       | 56/230 [02:28<07:32,  2.60s/it, loss=10.4, v_num=18, train_error_step=13.10]Epoch 0:  24%|██▍       | 56/230 [02:28<07:32,  2.60s/it, loss=10.2, v_num=18, train_error_step=14.60]Epoch 0:  25%|██▍       | 57/230 [02:30<07:29,  2.60s/it, loss=10.2, v_num=18, train_error_step=14.60]Epoch 0:  25%|██▍       | 57/230 [02:30<07:29,  2.60s/it, loss=9.93, v_num=18, train_error_step=11.70]Epoch 0:  25%|██▌       | 58/230 [02:33<07:26,  2.60s/it, loss=9.93, v_num=18, train_error_step=11.70]Epoch 0:  25%|██▌       | 58/230 [02:33<07:26,  2.60s/it, loss=9.8, v_num=18, train_error_step=17.00] Epoch 0:  26%|██▌       | 59/230 [02:35<07:23,  2.60s/it, loss=9.8, v_num=18, train_error_step=17.00]Epoch 0:  26%|██▌       | 59/230 [02:35<07:23,  2.60s/it, loss=9.66, v_num=18, train_error_step=14.50]Epoch 0:  26%|██▌       | 60/230 [02:38<07:20,  2.59s/it, loss=9.66, v_num=18, train_error_step=14.50]Epoch 0:  26%|██▌       | 60/230 [02:38<07:20,  2.59s/it, loss=9.41, v_num=18, train_error_step=13.50]Epoch 0:  27%|██▋       | 61/230 [02:40<07:17,  2.59s/it, loss=9.41, v_num=18, train_error_step=13.50]Epoch 0:  27%|██▋       | 61/230 [02:40<07:17,  2.59s/it, loss=9.54, v_num=18, train_error_step=17.60]Epoch 0:  27%|██▋       | 62/230 [02:43<07:14,  2.59s/it, loss=9.54, v_num=18, train_error_step=17.60]Epoch 0:  27%|██▋       | 62/230 [02:43<07:14,  2.59s/it, loss=9.42, v_num=18, train_error_step=13.00]Epoch 0:  27%|██▋       | 63/230 [02:45<07:11,  2.58s/it, loss=9.42, v_num=18, train_error_step=13.00]Epoch 0:  27%|██▋       | 63/230 [02:45<07:11,  2.58s/it, loss=9.29, v_num=18, train_error_step=13.40]Epoch 0:  28%|██▊       | 64/230 [02:47<07:08,  2.58s/it, loss=9.29, v_num=18, train_error_step=13.40]Epoch 0:  28%|██▊       | 64/230 [02:47<07:08,  2.58s/it, loss=9.3, v_num=18, train_error_step=14.80] Epoch 0:  28%|██▊       | 65/230 [02:50<07:06,  2.58s/it, loss=9.3, v_num=18, train_error_step=14.80]Epoch 0:  28%|██▊       | 65/230 [02:50<07:06,  2.58s/it, loss=9.17, v_num=18, train_error_step=16.00]Epoch 0:  29%|██▊       | 66/230 [02:52<07:02,  2.58s/it, loss=9.17, v_num=18, train_error_step=16.00]Epoch 0:  29%|██▊       | 66/230 [02:52<07:02,  2.58s/it, loss=9.26, v_num=18, train_error_step=16.80]Epoch 0:  29%|██▉       | 67/230 [02:55<06:59,  2.58s/it, loss=9.26, v_num=18, train_error_step=16.80]Epoch 0:  29%|██▉       | 67/230 [02:55<06:59,  2.58s/it, loss=9.29, v_num=18, train_error_step=13.70]Epoch 0:  30%|██▉       | 68/230 [02:57<06:56,  2.57s/it, loss=9.29, v_num=18, train_error_step=13.70]Epoch 0:  30%|██▉       | 68/230 [02:57<06:56,  2.57s/it, loss=9.28, v_num=18, train_error_step=12.80]Epoch 0:  30%|███       | 69/230 [03:00<06:54,  2.57s/it, loss=9.28, v_num=18, train_error_step=12.80]Epoch 0:  30%|███       | 69/230 [03:00<06:54,  2.57s/it, loss=9.22, v_num=18, train_error_step=16.90]Epoch 0:  30%|███       | 70/230 [03:02<06:51,  2.57s/it, loss=9.22, v_num=18, train_error_step=16.90]Epoch 0:  30%|███       | 70/230 [03:02<06:51,  2.57s/it, loss=9.32, v_num=18, train_error_step=16.30]Epoch 0:  31%|███       | 71/230 [03:04<06:48,  2.57s/it, loss=9.32, v_num=18, train_error_step=16.30]Epoch 0:  31%|███       | 71/230 [03:04<06:48,  2.57s/it, loss=9.55, v_num=18, train_error_step=14.80]Epoch 0:  31%|███▏      | 72/230 [03:07<06:45,  2.57s/it, loss=9.55, v_num=18, train_error_step=14.80]Epoch 0:  31%|███▏      | 72/230 [03:07<06:45,  2.57s/it, loss=9.37, v_num=18, train_error_step=14.10]Epoch 0:  32%|███▏      | 73/230 [03:09<06:42,  2.57s/it, loss=9.37, v_num=18, train_error_step=14.10]Epoch 0:  32%|███▏      | 73/230 [03:09<06:42,  2.57s/it, loss=9.29, v_num=18, train_error_step=14.50]Epoch 0:  32%|███▏      | 74/230 [03:12<06:39,  2.56s/it, loss=9.29, v_num=18, train_error_step=14.50]Epoch 0:  32%|███▏      | 74/230 [03:12<06:39,  2.56s/it, loss=9.23, v_num=18, train_error_step=15.90]Epoch 0:  33%|███▎      | 75/230 [03:14<06:37,  2.56s/it, loss=9.23, v_num=18, train_error_step=15.90]Epoch 0:  33%|███▎      | 75/230 [03:14<06:37,  2.56s/it, loss=9.03, v_num=18, train_error_step=11.90]Epoch 0:  33%|███▎      | 76/230 [03:17<06:34,  2.56s/it, loss=9.03, v_num=18, train_error_step=11.90]Epoch 0:  33%|███▎      | 76/230 [03:17<06:34,  2.56s/it, loss=9.04, v_num=18, train_error_step=13.40]Epoch 0:  33%|███▎      | 77/230 [03:19<06:31,  2.56s/it, loss=9.04, v_num=18, train_error_step=13.40]Epoch 0:  33%|███▎      | 77/230 [03:19<06:31,  2.56s/it, loss=9.06, v_num=18, train_error_step=11.90]Epoch 0:  34%|███▍      | 78/230 [03:22<06:29,  2.56s/it, loss=9.06, v_num=18, train_error_step=11.90]Epoch 0:  34%|███▍      | 78/230 [03:22<06:29,  2.56s/it, loss=8.83, v_num=18, train_error_step=12.50]Epoch 0:  34%|███▍      | 79/230 [03:24<06:26,  2.56s/it, loss=8.83, v_num=18, train_error_step=12.50]Epoch 0:  34%|███▍      | 79/230 [03:24<06:26,  2.56s/it, loss=8.85, v_num=18, train_error_step=14.40]Epoch 0:  35%|███▍      | 80/230 [03:27<06:23,  2.56s/it, loss=8.85, v_num=18, train_error_step=14.40]Epoch 0:  35%|███▍      | 80/230 [03:27<06:23,  2.56s/it, loss=8.89, v_num=18, train_error_step=13.30]Epoch 0:  35%|███▌      | 81/230 [03:29<06:21,  2.56s/it, loss=8.89, v_num=18, train_error_step=13.30]Epoch 0:  35%|███▌      | 81/230 [03:29<06:21,  2.56s/it, loss=8.69, v_num=18, train_error_step=11.10]Epoch 0:  36%|███▌      | 82/230 [03:32<06:18,  2.56s/it, loss=8.69, v_num=18, train_error_step=11.10]Epoch 0:  36%|███▌      | 82/230 [03:32<06:18,  2.56s/it, loss=8.76, v_num=18, train_error_step=14.80]Epoch 0:  36%|███▌      | 83/230 [03:34<06:15,  2.56s/it, loss=8.76, v_num=18, train_error_step=14.80]Epoch 0:  36%|███▌      | 83/230 [03:34<06:15,  2.56s/it, loss=8.87, v_num=18, train_error_step=15.20]Epoch 0:  37%|███▋      | 84/230 [03:37<06:13,  2.56s/it, loss=8.87, v_num=18, train_error_step=15.20]Epoch 0:  37%|███▋      | 84/230 [03:37<06:13,  2.56s/it, loss=8.77, v_num=18, train_error_step=12.40]Epoch 0:  37%|███▋      | 85/230 [03:39<06:10,  2.56s/it, loss=8.77, v_num=18, train_error_step=12.40]Epoch 0:  37%|███▋      | 85/230 [03:39<06:10,  2.56s/it, loss=8.98, v_num=18, train_error_step=15.50]Epoch 0:  37%|███▋      | 86/230 [03:42<06:07,  2.55s/it, loss=8.98, v_num=18, train_error_step=15.50]Epoch 0:  37%|███▋      | 86/230 [03:42<06:07,  2.55s/it, loss=8.79, v_num=18, train_error_step=14.10]Epoch 0:  38%|███▊      | 87/230 [03:44<06:05,  2.55s/it, loss=8.79, v_num=18, train_error_step=14.10]Epoch 0:  38%|███▊      | 87/230 [03:44<06:05,  2.55s/it, loss=8.93, v_num=18, train_error_step=13.80]Epoch 0:  38%|███▊      | 88/230 [03:47<06:02,  2.55s/it, loss=8.93, v_num=18, train_error_step=13.80]Epoch 0:  38%|███▊      | 88/230 [03:47<06:02,  2.55s/it, loss=8.87, v_num=18, train_error_step=14.20]Epoch 0:  39%|███▊      | 89/230 [03:49<06:00,  2.55s/it, loss=8.87, v_num=18, train_error_step=14.20]Epoch 0:  39%|███▊      | 89/230 [03:49<06:00,  2.55s/it, loss=8.85, v_num=18, train_error_step=10.90]Epoch 0:  39%|███▉      | 90/230 [03:52<05:57,  2.55s/it, loss=8.85, v_num=18, train_error_step=10.90]Epoch 0:  39%|███▉      | 90/230 [03:52<05:57,  2.55s/it, loss=8.7, v_num=18, train_error_step=12.10] Epoch 0:  40%|███▉      | 91/230 [03:54<05:54,  2.55s/it, loss=8.7, v_num=18, train_error_step=12.10]Epoch 0:  40%|███▉      | 91/230 [03:54<05:54,  2.55s/it, loss=8.36, v_num=18, train_error_step=11.30]Epoch 0:  40%|████      | 92/230 [03:57<05:52,  2.55s/it, loss=8.36, v_num=18, train_error_step=11.30]Epoch 0:  40%|████      | 92/230 [03:57<05:52,  2.55s/it, loss=8.26, v_num=18, train_error_step=14.70]Epoch 0:  40%|████      | 93/230 [03:59<05:49,  2.55s/it, loss=8.26, v_num=18, train_error_step=14.70]Epoch 0:  40%|████      | 93/230 [03:59<05:49,  2.55s/it, loss=8.38, v_num=18, train_error_step=13.20]Epoch 0:  41%|████      | 94/230 [04:02<05:46,  2.55s/it, loss=8.38, v_num=18, train_error_step=13.20]Epoch 0:  41%|████      | 94/230 [04:02<05:46,  2.55s/it, loss=8.53, v_num=18, train_error_step=14.40]Epoch 0:  41%|████▏     | 95/230 [04:04<05:43,  2.55s/it, loss=8.53, v_num=18, train_error_step=14.40]Epoch 0:  41%|████▏     | 95/230 [04:04<05:43,  2.55s/it, loss=8.59, v_num=18, train_error_step=12.20]Epoch 0:  42%|████▏     | 96/230 [04:06<05:41,  2.55s/it, loss=8.59, v_num=18, train_error_step=12.20]Epoch 0:  42%|████▏     | 96/230 [04:06<05:41,  2.55s/it, loss=8.34, v_num=18, train_error_step=13.00]Epoch 0:  42%|████▏     | 97/230 [04:09<05:38,  2.54s/it, loss=8.34, v_num=18, train_error_step=13.00]Epoch 0:  42%|████▏     | 97/230 [04:09<05:38,  2.54s/it, loss=8.5, v_num=18, train_error_step=12.80] (tensor([13], device='cuda:1'),)
+13 3
+idx: 3 
+ tensor([106.0215,  17.6650], device='cuda:1') tensor([12.4931,  6.3439], device='cuda:1', grad_fn=<SelectBackward>)
