@@ -34,6 +34,7 @@ class GazeModel(BaseModel):
         Returns:
             the modified parser.
         """
+        parser.add_argument('--use_eyes', action='store_true', default=False, help='use eyes for itracker model.')
 
         if is_train:
             parser.add_argument('--lambda_regression', type=float, default=1.0, help='weight for the regression loss')  # You can define new arguments for this model.
@@ -120,6 +121,9 @@ class GazeModel(BaseModel):
             self.visual_names = ["face"]
             if self.opt.debug:
                 self.visual_names += ["gt_position", "ec_position"]
+            if self.opt.use_eyes:
+                self.visual_names += ["leye", "reye"]
+
             self.get_current_visuals("train", batch_idx)
 
         return batch_dictionary

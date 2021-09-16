@@ -49,10 +49,12 @@ class ItrackerFaceImageModel(nn.Module):
 
 class ItrackerEyeImageModel(nn.Module):
     # Used for both eyes (with shared weights) and the face (with unqiue weights)
-    def __init__(self):
+    def __init__(self, backbone = "resnet50", dilated = False):
         super(ItrackerEyeImageModel, self).__init__()
-        self.model = resnet50(pretrained=True, replace_stride_with_dilation = [True, True, True])
-       
+        if backbone == "resnet50":
+            self.model = resnet50(pretrained=True, replace_stride_with_dilation = [dilated, dilated, dilated])
+        elif backbone == "resnet18":
+            self.model = resnet18(pretrained=True, replace_stride_with_dilation = [dilated, dilated, dilated])
     def forward(self, x):
         x = self.model(x)
         x = x.view(x.size(0), -1)
@@ -178,11 +180,15 @@ class EyeCornerModel(nn.Module):
         return x
 class EyeImageModel(nn.Module):
     
-    def __init__(self):
+    def __init__(self, backbone = "resnet50"):
         super(EyeImageModel, self).__init__()
-        self.conv = ItrackerEyeImageModel()
+        self.conv = ItrackerEyeImageModel(backbone=backbone)
+        if backbone == "resnet18":
+            ngf = 512
+        else:
+            ngf = 2048
         self.fc = nn.Sequential(
-            nn.Linear(8*8*512, 128),
+            nn.Linear(ngf, 128),
             nn.ReLU(inplace=True),
             )
 

@@ -5,7 +5,8 @@ import random
 import os,h5py
 import numpy as np
 import torch
-from util.data_util import read_json,handle_eyecorner_rectangle, draw_point, get_rect
+import cv2 as cv
+from util.data_util import read_json,handle_eyecorner_rectangle, draw_point, get_rect, get_eye_rect
 
 class MPKUDataset(BaseDataset):
 
@@ -21,6 +22,7 @@ class MPKUDataset(BaseDataset):
             the modified parser.
         """
         parser.add_argument('--interval', type=int, default=5, help='interval for video dataset.')
+
         parser.add_argument('--create_idx_file', action='store_true', default=False, help='create index file mapping from full-data index to key and person-specific index')
         parser.add_argument('--debug', action='store_true', default=False, help='debug using ec and gaze point position.')
         return parser
@@ -89,14 +91,21 @@ class MPKUDataset(BaseDataset):
                 self.hdfs[num_i] = None
 
     def cropImage(self, img, bbox):
-        bbox = np.array(bbox, int)
-        aSrc = np.maximum(bbox[:2], 0)
-        bSrc = np.minimum(bbox[:2] + bbox[2:], (img.shape[1], img.shape[0]))
-        aDst = aSrc - bbox[:2]
-        bDst = aDst + (bSrc - aSrc)
-        res = np.zeros((bbox[3], bbox[2], img.shape[2]), img.dtype)    
-        res[aDst[1]:bDst[1],aDst[0]:bDst[0],:] = img[aSrc[1]:bSrc[1],aSrc[0]:bSrc[0],:]
+        try:
+            bbox = np.array(bbox, int)
+            aSrc = np.maximum(bbox[:2], 0)
+            bSrc = np.minimum(bbox[:2] + bbox[2:], (img.shape[1], img.shape[0]))
+            aDst = aSrc - bbox[:2]
+            bDst = aDst + (bSrc - aSrc)
+            res = np.zeros((bbox[3], bbox[2], img.shape[2]), img.dtype)    
+            res[aDst[1]:bDst[1],aDst[0]:bDst[0],:] = img[aSrc[1]:bSrc[1],aSrc[0]:bSrc[0],:]
+            if res.size != 0:
+                return res
+        except:
+            pass
+        res = np.zeros((img.shape))
         return res
+
     def __getitem__(self, idx):
         key, idx = self.idx_to_kv[idx]
         entry = {}
@@ -124,18 +133,25 @@ class MPKUDataset(BaseDataset):
         face = face[:, :, [2, 1, 0]]  # from BGR to RGB
         #print(image.shape,image.dtype, leye.shape, leye.dtype)
        # print(pts)
-        x_min,x_max,y_min,y_max = get_rect(pts[42:47])
+        x_min,x_max,y_min,y_max = get_eye_rect(pts, pts[42:47])
         #print(x_max - x_min, y_max - y_min)
         leye_image = self.cropImage(face, [x_min,y_min,x_max - x_min,y_max -y_min])
-        x_min,x_max,y_min,y_max = get_rect(pts[36:41])
+        x_min,x_max,y_min,y_max = get_eye_rect(pts, pts[36:41])
         reye_image = self.cropImage(face, [x_min,y_min,x_max - x_min,y_max -y_min])
+        leye_image = cv.resize(leye_image,[112,112]).astype(np.uint8)
+        reye_image = cv.resize(reye_image,[112,112]).astype(np.uint8)
+
         #print(image.shape)
         face = self.transform(face)
-        # leye_image = self.transform(leye_image)
-        # reye_image = self.transform(reye_image)
+        leye_image = self.transform(leye_image)
+        reye_image = self.transform(reye_image)
         
         # head_pose = self.hdf['face_head_pose'][idx, :]
         # head_pose = head_pose.astype('float')
+        if self.opt.use_eyes:
+            entry["leye"] = leye_image
+            entry["reye"] = reye_image
+
         entry["face"] = face
         entry["ec"] = np.array(ec)
         entry["ec"] = torch.FloatTensor(entry["ec"])

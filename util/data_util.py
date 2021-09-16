@@ -30,3 +30,40 @@ def draw_point(pts,size = [192, 108]):
     img = np.expand_dims(img, axis=0)
     return img
 
+def get_rect(points , ratio = 1.0): # ratio = w:h
+    x = points[:,0]
+    y = points[:,1]
+
+    x_expand = 0.1*(max(x)-min(x))
+    y_expand = 0.1*(max(y)-min(y))
+    
+    
+    x_max, x_min = max(x)+x_expand, min(x)-x_expand
+    y_max, y_min = max(y)+y_expand, min(y)-y_expand
+
+    #h:w=1:2
+    if (y_max-y_min)*ratio < (x_max-x_min):
+        h = (x_max-x_min)/ratio
+        pad = (h-(y_max-y_min))/2
+        y_max += pad
+        y_min -= pad
+    else:
+        h = (y_max-y_min)
+        pad = (h*ratio-(x_max-x_min))/2
+        x_max += pad
+        x_min -= pad
+    return int(x_min),int(x_max),int(y_min),int(y_max)
+
+def get_eye_rect(face_points, eye_points, ratio = 1.0):
+    x_min,x_max,y_min,y_max = get_rect(face_points)
+    w = x_max - x_min
+    eye_points_copy = eye_points.copy()
+    eye_points_copy[:,0] = eye_points_copy[:,0] - x_min
+    eye_points_copy[:,1] = eye_points_copy[:,1] - y_min
+    eye_points_copy = eye_points_copy * 224 / w
+    try:
+        result = get_rect(eye_points_copy, ratio = ratio)
+    except:
+        # print("face_points:",face_points)
+        result = 0, 1, 0, 1
+    return result
