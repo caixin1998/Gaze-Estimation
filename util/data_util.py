@@ -2,6 +2,7 @@ import os
 import json
 import numpy as np 
 import cv2 as cv
+import torch 
 def read_json(data_dir):
     refer_list_file = os.path.join(data_dir, 'train_valid_split.json')
     print('load the train file list from: ', refer_list_file)
@@ -29,6 +30,33 @@ def draw_point(pts,size = [192, 108]):
     # print(img.shape)
     img = np.expand_dims(img, axis=0)
     return img
+
+
+def draw_gaze(gt, pred = None, image_in = None, size = (224, 224, 3), thickness=2, color=(0, 0, 255), color_gt=(0, 255, 0)):
+    if image_in is None:
+        image_in = np.zeros(size)
+
+    image_out = image_in
+    # print("image_in.shape:", image_in.shape)
+    (h, w) = image_in.shape[:2]
+    length = w / 2.0
+    pos = (int(h / 2.0), int(w / 4.0))
+    if len(image_out.shape) == 2 or image_out.shape[2] == 1:
+        image_out = cv.cvtColor(image_out, cv.COLOR_GRAY2BGR)
+    dx = -length * np.sin(gt[1]) * np.cos(gt[0])
+    dy = -length * np.sin(gt[0])
+    cv.arrowedLine(image_out, tuple(np.round(pos).astype(np.int32)),
+                   tuple(np.round([pos[0] + dx, pos[1] + dy]).astype(int)), color,
+                   thickness, cv.LINE_AA, tipLength=0.2)
+    if pred is not None:
+        dx = -length * np.sin(pred[1]) * np.cos(pred[0])
+        dy = -length * np.sin(pred[0])
+        cv.arrowedLine(image_out, tuple(np.round(pos).astype(np.int32)),
+                   tuple(np.round([pos[0] + dx, pos[1] + dy]).astype(int)), color_gt,
+                   thickness, cv.LINE_AA, tipLength=0.2)  
+    image_out = image_out.transpose((2,0,1))
+    return image_out
+
 
 def get_rect(points , ratio = 1.0): # ratio = w:h
     x = points[:,0]
@@ -67,3 +95,22 @@ def get_eye_rect(face_points, eye_points, ratio = 1.0):
         # print("face_points:",face_points)
         result = 0, 1, 0, 1
     return result
+
+def tensor2im(input_image, imtype=np.uint8):
+    mean = [0.485, 0.456, 0.406]
+    std = [0.229, 0.224, 0.225]
+    if isinstance(input_image, torch.Tensor):
+        image_tensor = input_image.data
+    else:
+        return input_image
+    # print(image_tensor.shape)
+    image_numpy = image_tensor.cpu().float().numpy()
+    if image_numpy.shape[0] == 1:
+        image_numpy = (image_numpy - np.min(image_numpy)) / (np.max(image_numpy) - np.min(image_numpy))
+        image_numpy = image_numpy * 2 - 1
+        image_numpy = np.tile(image_numpy, (3, 1, 1))
+    for i in range(len(mean)):
+        image_numpy[i] = image_numpy[i] * std[i] + mean[i]
+    image_numpy = np.transpose(image_numpy, (1, 2, 0)) * 255.0
+    image_numpy = np.clip(image_numpy, 0.0, 255.0)
+    return image_numpy.astype(imtype).copy()

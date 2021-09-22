@@ -112,7 +112,7 @@ def get_transform(opt, params=None, grayscale=False, method=Image.BICUBIC, conve
         if grayscale:
             transform_list += [transforms.Normalize((0.5,), (0.5,))]
         else:
-            transform_list += [transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
+            transform_list += [transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))]
     return transforms.Compose(transform_list)
 
 
