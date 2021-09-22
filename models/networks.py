@@ -646,7 +646,7 @@ class GazeNetwork(nn.Module):
 
 class Gaze2Network(nn.Module):
     def __init__(self, backbone = "resnet50", feat_nc = 256):
-        super(GazeNetwork, self).__init__()
+        super(Gaze2Network, self).__init__()
         if backbone == "resnet50":
             self.model1 = resnet50(pretrained=True)
             self.model2 = resnet50(pretrained=True)
