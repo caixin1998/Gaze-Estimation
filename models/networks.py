@@ -121,7 +121,9 @@ def init_net(net, init_type='normal', init_gain=0.02, gpu_ids=[]):
 def define_GazeNetwork(netGaze = "regressor", backbone = "resnet50", ngf = 256):
     if netGaze == "regressor":
         net = GazeNetwork(backbone,ngf)
-    if netGaze == "iTracker":
+    elif netGaze == "gaze2":
+        net = Gaze2Network(backbone,ngf)
+    elif netGaze == "iTracker":
         net = iTrackerECModel(backbone)
     else:
         raise NotImplementedError('Generator model name [%s] is not recognized' % netGaze)
@@ -641,3 +643,30 @@ class GazeNetwork(nn.Module):
         x = self.model(x["face"])
         x = self.gaze_fc(x)
         return x
+
+class Gaze2Network(nn.Module):
+    def __init__(self, backbone = "resnet50", feat_nc = 256):
+        super(GazeNetwork, self).__init__()
+        if backbone == "resnet50":
+            self.model1 = resnet50(pretrained=True)
+            self.model2 = resnet50(pretrained=True)
+
+
+        self.gaze_fc1 = nn.Sequential(
+            nn.Linear(2048, feat_nc),
+            nn.ReLU(inplace = True),
+            nn.Linear(feat_nc, 2),
+        )
+
+        self.gaze_fc2 = nn.Sequential(
+            nn.Linear(2048, feat_nc),
+            nn.ReLU(inplace = True),
+            nn.Linear(feat_nc, 1),
+        )
+
+    def forward(self, x): 
+        x1 = self.model1(x["face"])
+        x1 = self.gaze_fc1(x1)
+        x2 = self.model2(x["face"])
+        x2 = self.gaze_fc2(x2)
+        return torch.cat([x1,x2],axis=1)

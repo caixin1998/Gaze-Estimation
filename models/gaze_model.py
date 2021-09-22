@@ -145,12 +145,13 @@ class GazeModel(BaseModel):
         batch_dictionary = {
             'preds': output_pred, 'target': output
         }
-        output_pred_np = output_pred.detach().cpu().numpy()
-        self.pred_position = torch.zeros_like(self.gt_position)
-        for i, pred in enumerate(output_pred_np):
+        if self.opt.debug:
+            output_pred_np = output_pred.detach().cpu().numpy()
+            self.pred_position = torch.zeros_like(self.gt_position)
+            for i, pred in enumerate(output_pred_np):
             # print(pred, output[i])
-            pred = [pred[0] / 53.15, pred[1] / 29.9]
-            self.pred_position[i] = torch.tensor(draw_point(pred))
+                pred = [pred[0] / 53.15, pred[1] / 29.9]
+                self.pred_position[i] = torch.tensor(draw_point(pred))
         if batch_idx % self.opt.visual_freq == 0:
             self.visual_names = ["face"]
             if self.opt.debug:
