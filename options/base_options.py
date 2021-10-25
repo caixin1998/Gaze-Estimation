@@ -76,7 +76,8 @@ class BaseOptions():
 
         #for cam visualizer
         parser.add_argument('--cam', action='store_true', help='if specified, use cam to visualize the conv attention.')
-   
+        parser.add_argument('--cam_layer', type =str, default = 'model.layer4[-1]', help='the layer we want to visulize.')
+        parser.add_argument('--cam_type', type =str, default = 'LayerGradCam', help='the method to visulize.')
 
         parser.set_defaults(
         max_epochs=20,

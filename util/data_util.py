@@ -114,3 +114,25 @@ def tensor2im(input_image, imtype=np.uint8):
     image_numpy = np.transpose(image_numpy, (1, 2, 0)) * 255.0
     image_numpy = np.clip(image_numpy, 0.0, 255.0)
     return image_numpy.astype(imtype).copy()
+
+def dict_list(dict, start, end):
+    new_dict = {}
+    for key, value in dict.items():
+        new_dict[key] = value[start:end]
+    return new_dict
+# (N,H,W) gray array -> (N,3,H,w) heatmaptensor
+def grayarray2heatmaptensor(grayscales):
+    heatmap_tensor = torch.zeros((grayscales.shape[0],3,grayscales.shape[1], grayscales.shape[2]))
+    for i,grayscale in enumerate(grayscales):
+        grayscale -= np.min(grayscale)
+        grayscale = grayscale / (1e-7 + np.max(grayscale))
+
+        grayscale = abs(grayscale - 0.5) * 2
+        
+        # print(np.uint8(grayscale * 255),np.uint8(grayscale * 255).shape)
+        heatmap = cv.applyColorMap(np.uint8(grayscale * 255), cv.COLORMAP_JET)
+        heatmap = np.float32(heatmap)
+        heatmap = heatmap.transpose((2,0,1))
+        # print(heatmap.shape, heatmap)
+        heatmap_tensor[i] = torch.tensor(heatmap)
+    return heatmap_tensor
