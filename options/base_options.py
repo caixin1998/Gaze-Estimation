@@ -71,6 +71,12 @@ class BaseOptions():
         #for trainer
         parser.add_argument('--gpus', type=int, default=4, help='number of gpus')
         parser.add_argument('--resume_from_checkpoint', type= str, default = None, help='resume_from_checkpoint and recover the whole training for Trainer.')
+        parser.add_argument('--valid', action='store_true', help='use fit or validate')
+
+
+        #for cam visualizer
+        parser.add_argument('--cam', action='store_true', help='if specified, use cam to visualize the conv attention.')
+   
 
         parser.set_defaults(
         max_epochs=20,

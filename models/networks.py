@@ -118,15 +118,15 @@ def init_net(net, init_type='normal', init_gain=0.02, gpu_ids=[]):
         init_weights(net, init_type, init_gain=init_gain)
     return net
 
-def define_GazeNetwork(netGaze = "regressor", backbone = "resnet50", ngf = 256):
-    if netGaze == "regressor":
-        net = GazeNetwork(backbone,ngf)
-    elif netGaze == "gaze2":
-        net = Gaze2Network(backbone,ngf)
-    elif netGaze == "iTracker":
-        net = iTrackerECModel(backbone)
+def define_GazeNetwork(opt):
+    if opt.netGaze == "regressor":
+        net = GazeNetwork(opt)
+    elif opt.netGaze == "gaze2":
+        net = Gaze2Network(opt)
+    elif opt.netGaze == "iTracker":
+        net = iTrackerECModel(opt)
     else:
-        raise NotImplementedError('Generator model name [%s] is not recognized' % netGaze)
+        raise NotImplementedError('Generator model name [%s] is not recognized' % opt.netGaze)
     return net
   
 def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, init_type='normal', init_gain=0.02, gpu_ids=[]):
@@ -628,40 +628,56 @@ class PixelDiscriminator(nn.Module):
         return self.net(input)
 
 class GazeNetwork(nn.Module):
-    def __init__(self, backbone = "resnet50", feat_nc = 256):
+    def __init__(self, opt):
         super(GazeNetwork, self).__init__()
-        if backbone == "resnet50":
+        self.opt = opt
+        if opt.backbone == "resnet50":
             self.model = resnet50(pretrained=True)
-
+        elif opt.backbone == "resnet18":
+            self.model = resnet18(pretrained=True)
         self.gaze_fc = nn.Sequential(
-            nn.Linear(2048, feat_nc),
+            nn.Linear(2048, opt.ngf),
             nn.ReLU(inplace = True),
-            nn.Linear(feat_nc, 2),
+            nn.Linear(opt.ngf, 2),
         )
 
     def forward(self, x): 
-        x = self.model(x["face"])
-        x = self.gaze_fc(x)
-        return x
+        if self.opt.cam:
+            x1 = self.model(x)
+        else:
+            x1 = self.model(x["face"])
+        
+        x2 = self.gaze_fc(x1)
+
+        if self.opt.write_features:
+            return x1
+        else:
+            return x2
+
+
 
 class Gaze2Network(nn.Module):
-    def __init__(self, backbone = "resnet50", feat_nc = 256):
+    def __init__(self, opt):
         super(Gaze2Network, self).__init__()
-        if backbone == "resnet50":
+        if opt.backbone == "resnet50":
             self.model1 = resnet50(pretrained=True)
             self.model2 = resnet50(pretrained=True)
-
-
+            feat_nc = 2048
+        elif opt.backbone == "resnet18":
+            self.model1 = resnet18(pretrained=True)
+            self.model2 = resnet18(pretrained=True)
+            feat_nc = 512
+            
         self.gaze_fc1 = nn.Sequential(
-            nn.Linear(2048, feat_nc),
+            nn.Linear(feat_nc, opt.ngf),
             nn.ReLU(inplace = True),
-            nn.Linear(feat_nc, 2),
+            nn.Linear(opt.ngf, 1),
         )
 
         self.gaze_fc2 = nn.Sequential(
-            nn.Linear(2048, feat_nc),
+            nn.Linear(feat_nc, opt.ngf),
             nn.ReLU(inplace = True),
-            nn.Linear(feat_nc, 1),
+            nn.Linear(opt.ngf, 1),
         )
 
     def forward(self, x): 
@@ -669,4 +685,6 @@ class Gaze2Network(nn.Module):
         x1 = self.gaze_fc1(x1)
         x2 = self.model2(x["face"])
         x2 = self.gaze_fc2(x2)
-        return torch.cat([x1,x2],axis=1)
+        result = torch.cat([x1,x2],axis=1)
+        return result
+

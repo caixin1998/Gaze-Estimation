@@ -37,5 +37,8 @@ if __name__ == '__main__':
     trainer = Trainer.from_argparse_args(opt, callbacks=callbacks, logger=tb_logger)
     # trainer.logger.default_hp_metric = False
     #auto_scale_batch_size = True
-    trainer.fit(model, data)
-
+    if not opt.valid:
+        trainer.fit(model, data)
+    else:
+        model = model.load_from_checkpoint("/home1/caixin/FewShotGaze/logs/gaze_estimation_xgaze/lightning_logs/version_70/checkpoints/best-epoch=28-val_error=5.1344.ckpt", write_features = opt.write_features, cam = opt.cam, visual_freq = 400)
+        trainer.validate(model, data)
