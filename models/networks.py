@@ -129,6 +129,14 @@ def define_GazeNetwork(opt):
         raise NotImplementedError('Generator model name [%s] is not recognized' % opt.netGaze)
     return net
   
+def define_EyeNetwork(opt):
+    if opt.netGaze == "eye":
+        net = EyeNet(opt)
+    else:
+        raise NotImplementedError('Generator model name [%s] is not recognized' % opt.netGaze)
+    return net
+
+
 def define_G(input_nc, output_nc, ngf, netG, norm='batch', use_dropout=False, init_type='normal', init_gain=0.02, gpu_ids=[]):
     """Create a generator
 

@@ -4,7 +4,7 @@ from util import util
 import torch
 import models
 import data
-
+import pytorch_lightning as pl
 
 class BaseOptions():
     """This class defines options used during both training and test time.
@@ -19,13 +19,14 @@ class BaseOptions():
         self.filename = filename
     def initialize(self, parser):
         """Define the common options that are used in both training and test."""
+        parser = pl.Trainer.add_argparse_args(parser)
+        
         # basic parameters
         parser.add_argument('-c', '--config', required=False, is_config_file=True, help='config file path', default = self.filename)
         parser.add_argument('--name', type=str, default='gaze_estimation', help='name of the experiment. It decides where to store samples and models')
 
         parser.add_argument('--seed', type=int, default=None, help='random seed for experiments.')
 
-        parser.add_argument('--accelerator', type=str, default="ddp", help='accelerator  for experiments.')
 
         parser.add_argument('--suffix', default='', type=str, help='customized suffix: opt.name = opt.name + suffix: e.g., {model}_{netG}_size{load_size}')
 
@@ -69,9 +70,12 @@ class BaseOptions():
         parser.add_argument('--preprocess', type =str, default = "none", help='new dataset option')
 
         #for trainer
-        parser.add_argument('--gpus', type=int, default=4, help='number of gpus')
-        parser.add_argument('--resume_from_checkpoint', type= str, default = None, help='resume_from_checkpoint and recover the whole training for Trainer.')
+        # parser.add_argument('--gpus', type=int, default=4, help='number of gpus')
+        # parser.add_argument('--resume_from_checkpoint', type= str, default = None, help='resume_from_checkpoint and recover the whole training for Trainer.')
         parser.add_argument('--valid', action='store_true', help='use fit or validate')
+        # parser.add_argument('--limit_train_batches', type =int, default = None, help='limit_train_batches.')
+        # parser.add_argument('--limit_val_batches', type =int, default = None, help='limit_val_batches.')
+
 
 
         #for cam visualizer
@@ -79,20 +83,22 @@ class BaseOptions():
         parser.add_argument('--cam_layer', type =str, default = 'model.layer4[-1]', help='the layer we want to visulize.')
         parser.add_argument('--cam_type', type =str, default = 'LayerGradCam', help='the method to visulize.')
 
+
+
         parser.set_defaults(
-        max_epochs=20,
+        max_epochs=1,
         check_val_every_n_epoch=1,
         weights_summary='full',
         log_every_n_steps=20,
         terminate_on_nan = True,
         gradient_clip_val=1.0,
+        gpus = 4,
+        accelerator = "ddp",
 #         track_grad_norm=2,
         )
 
         self.initialized = True
         return parser
-
-
 
 
 

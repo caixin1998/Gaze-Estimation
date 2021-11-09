@@ -89,7 +89,6 @@ class XGazeDataset(BaseDataset):
             random.seed(max_dataset_size)
             self.idx_to_kv = random.sample(self.idx_to_kv, max_dataset_size)
             # print(self.idx_to_kv[:20])
-            random.seed(time.time())
         for num_i in range(0, len(self.hdfs)):
             if self.hdfs[num_i]:
                 self.hdfs[num_i].close()
@@ -121,6 +120,6 @@ class XGazeDataset(BaseDataset):
         face = self.hdf['face_patch'][idx,:]
         face = face[:, :, [2, 1, 0]]
         face = self.transform(face)
-        gaze_label = self.hdf['face_gaze'][idx, :]
+        gaze_label = self.hdf['face_gaze'][idx, :].astype(np.float32)
         return {'face': face, 'gaze': gaze_label}
 

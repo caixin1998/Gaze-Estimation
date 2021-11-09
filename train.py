@@ -7,10 +7,12 @@ import pytorch_lightning as pl
 from pytorch_lightning import Trainer
 from util.util import  SetupCallback
 from pytorch_lightning import loggers as pl_loggers
+
 if __name__ == '__main__':
 
     opt = TrainOptions().parse()   # get training options
       # create a model given opt.model and other options
+    
 
     if opt.seed is not None:
         pl.seed_everything(opt.seed)
@@ -34,7 +36,12 @@ if __name__ == '__main__':
     data = CustomDataModule(opt)
     model = create_model(opt)
     tb_logger = pl_loggers.TensorBoardLogger(save_dir = opt.default_root_dir, name="lightning_logs")
-    trainer = Trainer.from_argparse_args(opt, callbacks=callbacks, logger=tb_logger)
+    from pytorch_lightning.profiler import AdvancedProfiler
+    profiler = AdvancedProfiler(filename = "profile.txt")
+
+    trainer = Trainer.from_argparse_args(opt, callbacks=callbacks, logger=tb_logger, profiler = profiler)
+
+
     # trainer.logger.default_hp_metric = False
     #auto_scale_batch_size = True
     if not opt.valid:

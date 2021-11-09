@@ -5,6 +5,8 @@ from .discriminator import Discriminator
 from .completion_net import CompletionNetwork,LocalDis,GlobalDis,PredictionEyeNetwork
 from .fsanet import FSANet
 from .iTrackerModel import iTrackerECModel
+from .eye_net import EyeNet
+
 #from .fsanet_64 import FSANet
 __all__ = [
     'resnet18',
@@ -18,4 +20,5 @@ __all__ = [
     'FSANet',
     'PredictionEyeNetwork',
     'iTrackerECModel',
+    'EyeNet'
 ]
