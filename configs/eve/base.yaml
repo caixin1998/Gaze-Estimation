@@ -2,7 +2,7 @@
 batch_size: 128
 
 
-dataroot: /home1/caixin/GazeData/eve_dataset
+dataroot: /home/caixin/GazeData/eve_dataset
 dataset: eve
 flip: false
 gpus: 4

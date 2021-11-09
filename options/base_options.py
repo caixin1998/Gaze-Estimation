@@ -86,7 +86,7 @@ class BaseOptions():
 
 
         parser.set_defaults(
-        max_epochs=1,
+        max_epochs=20,
         check_val_every_n_epoch=1,
         weights_summary='full',
         log_every_n_steps=20,

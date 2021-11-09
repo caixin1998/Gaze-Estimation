@@ -36,10 +36,10 @@ if __name__ == '__main__':
     data = CustomDataModule(opt)
     model = create_model(opt)
     tb_logger = pl_loggers.TensorBoardLogger(save_dir = opt.default_root_dir, name="lightning_logs")
-    from pytorch_lightning.profiler import AdvancedProfiler
-    profiler = AdvancedProfiler(filename = "profile.txt")
+    # from pytorch_lightning.profiler import AdvancedProfiler
+    # profiler = AdvancedProfiler(filename = "profile.txt")
 
-    trainer = Trainer.from_argparse_args(opt, callbacks=callbacks, logger=tb_logger, profiler = profiler)
+    trainer = Trainer.from_argparse_args(opt, callbacks=callbacks, logger=tb_logger)
 
 
     # trainer.logger.default_hp_metric = False

@@ -40,7 +40,7 @@ def draw_gaze(gt, pred = None, image_in = None, size = (224, 224, 3), thickness=
     # print("image_in.shape:", image_in.shape)
     (h, w) = image_in.shape[:2]
     length = w / 2.0
-    pos = (int(h / 2.0), int(w / 4.0))
+    pos = (int(w / 2.0), int(h / 2.0))
     if len(image_out.shape) == 2 or image_out.shape[2] == 1:
         image_out = cv.cvtColor(image_out, cv.COLOR_GRAY2BGR)
     dx = -length * np.sin(gt[1]) * np.cos(gt[0])

@@ -66,7 +66,9 @@ class CustomDataModule(LightningDataModule):
             self.train_dataset,
             batch_size=self.opt.batch_size,
             shuffle=True,
-            num_workers=int(self.opt.num_threads))
+            num_workers=int(self.opt.num_threads),
+            persistent_workers = True,
+            prefetch_factor = 4)
     
     def val_dataloader(self):
         print('The number of validation images = %d' % len(self.val_dataset))

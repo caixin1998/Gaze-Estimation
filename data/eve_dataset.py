@@ -63,7 +63,7 @@ class EVEDataset(BaseDataset):
         parser.add_argument('--new_dataset_option', type=float, default=1.0, help='new dataset option')
 
       
-        parser.add_argument('--cameras_to_use', type=str, nargs='+', default=['basler'], help='data form those cameras will be used.')
+        parser.add_argument('--cameras_to_use', type=str, nargs='+', default=['basler', 'webcam_l', 'webcam_c', 'webcam_r'], help='data form those cameras will be used.')
         parser.add_argument('--types_of_stimuli', type=str, nargs='+', default=["image", "video", "wikipedia"], help='using specific types of stimuli from eve')
 
         parser.add_argument('--face_size', type=int, default=256, help='size of input face image.')
@@ -145,7 +145,8 @@ class EVEDataset(BaseDataset):
                     current_outputs = []
                     source_path_pre = '%s/%s' % (subfolder_path, source)
                     available_indices = np.loadtxt('%s.timestamps.txt' % source_path_pre)
-                    for i in range(0, len(available_indices), self.opt.interval):
+                    interval = self.opt.interval * 2 if source == 'basler' else self.opt.interval
+                    for i in range(0, len(available_indices), interval):
                         current_outputs.append(i)
                     # Store back indices
                     if len(current_outputs) > 0:
@@ -198,6 +199,7 @@ class EVEDataset(BaseDataset):
     def preprocess_frame(self, frame):
         # Expected input:  N x H x W x C
         # Expected output: N x C x H x W
+        frame = frame[:, :, [2, 1, 0]]
         frame = np.transpose(frame, [2, 0, 1])
         frame = frame.astype(np.float32)
         frame *= 2.0 / 255.0
@@ -255,6 +257,11 @@ class EVEDataset(BaseDataset):
 
         frame_path = os.path.join(video_path, "%05d.png"%index)
         frame = cv.imread(frame_path)
+
+        save_path = video_path.replace('1','',1)
+        os.makedirs(save_path, exist_ok=True)
+        cv.imwrite(os.path.join(save_path, "%05d.png"%index), frame)
+
         # with open(frame_path, "rb") as f:
         #     frame = jpeg.decode_jpeg(f.read(), colorspace='bgr')
 

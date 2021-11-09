@@ -176,7 +176,7 @@ class EVEModel(BaseModel):
         # print(batch.keys())
         self.calculate_g_with_two_eyes(batch,output)
         self.calculate_g_with_two_eyes(batch,output_pred)
-
+        # print(output_pred['PoG_cm'][0], output['PoG_cm'][0])
         if batch_idx % self.opt.visual_freq == 0:
             
             output_pred_np = output_pred['g'].detach().cpu().numpy()
@@ -191,7 +191,8 @@ class EVEModel(BaseModel):
                 self.face_pred_gt = torch.zeros_like(self.face[:64])
                 for i, pred in enumerate(output_pred_np[:64]):
                     self.face_pred_gt[i] = torch.tensor(draw_gaze(gts[i], pred, image_in = tensor2im(self.face[i])))
-                
+
+            self.get_current_visuals("valid", batch_idx)  
         return batch_dictionary
 
     def validation_step_end(self,outputs):
@@ -200,7 +201,7 @@ class EVEModel(BaseModel):
             ["validity"].repeat(2,1).T)
             self.valid_distance_error = self.valid_distance_metric(outputs['preds']['PoG_cm'] * outputs["validity"].repeat(2,1).T, outputs['target']['PoG_cm'] * outputs
             ["validity"].repeat(2,1).T)
-
+    
             self.log("val_error", self.valid_angular_metric, on_step=True, on_epoch=True, sync_dist=True)
             self.log("val_distance_error", self.valid_distance_metric, on_step=True, on_epoch=True, sync_dist=True)
             self.log("hp_metric", self.valid_angular_metric, sync_dist=True)
@@ -226,7 +227,7 @@ class EVEModel(BaseModel):
         for side in ('left', 'right'):
             origin = input[side + '_o']
                
-            direction = input[side + '_g' + input_suffix]
+            direction = output[side + '_g' + output_suffix]
             rotation = input[side + '_R']
                         
             PoG_mm, PoG_px = to_screen_coordinates(origin, direction, rotation, input)
@@ -239,8 +240,8 @@ class EVEModel(BaseModel):
             output['right_PoG_px' + output_suffix],
         ], axis=-1), axis=-1)
         output['PoG_cm' + output_suffix] = torch.mean(torch.stack([
-            input['left_PoG_cm' + input_suffix],
-            input['right_PoG_cm' + input_suffix],
+            output['left_PoG_cm' + output_suffix],
+            output['right_PoG_cm' + output_suffix],
         ], axis=-1), axis=-1)
         output['PoG_mm' + output_suffix] = \
             10.0 * output['PoG_cm' + output_suffix]
