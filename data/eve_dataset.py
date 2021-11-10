@@ -277,10 +277,12 @@ class EVEDataset(BaseDataset):
             ew = self.opt.eyes_size
             subentry['leye'] = frame[:, :, ew:]
             subentry['reye'] = frame[:, :, :ew]
-            subentry['eyes'] = frame[:, :, :]
-        elif self.opt.camera_frame_type == 'original_face':
+            # subentry['eyes'] = frame[:, :, :]
+        elif self.opt.camera_frame_type == 'face':
             subentry['face'] = frame[:, :, :]
-            
+        elif self.opt.camera_frame_type == 'original_face':
+            subentry['original_face'] = frame[:, :, :]
+        
             # print(frames.shape[0],subentry["facial_landmarks"].shape[0])
           
             eye_corner = self.handle_eye_corner(subentry["facial_landmarks"])

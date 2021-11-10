@@ -132,6 +132,8 @@ def define_GazeNetwork(opt):
 def define_EyeNetwork(opt):
     if opt.netGaze == "eye":
         net = EyeNet(opt)
+    if opt.netGaze == "regressor":
+        net = GazeNetwork(opt)
     else:
         raise NotImplementedError('Generator model name [%s] is not recognized' % opt.netGaze)
     return net
@@ -660,7 +662,7 @@ class GazeNetwork(nn.Module):
         if self.opt.write_features:
             return x1
         else:
-            return x2
+            return {"g":x2}
 
 
 

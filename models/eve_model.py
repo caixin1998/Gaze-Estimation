@@ -96,8 +96,8 @@ class EVEModel(BaseModel):
         if "reye" in input:
             self.reye = input['reye']
             self.net_input["reye"] = self.reye
-        if "eyes" in input:
-            self.eyes = input['eyes']
+        if "leye" in input and "reye" in input:
+            self.eyes = torch.cat((input['reye'],input['leye']), axis = -1)
         
         if "left_h" in input:
             self.net_input["left_h"] = input["left_h"]
@@ -113,9 +113,7 @@ class EVEModel(BaseModel):
             self.output["left_g"] = input["left_g_tobii"]
         if "right_g_tobii" in input:
             self.output["right_g"] = input["right_g_tobii"]
-
-
-            
+   
         return self.net_input, self.output
 
 
@@ -128,10 +126,14 @@ class EVEModel(BaseModel):
         input, output = self.set_input(batch)
         output_pred = self(input)
         self.calculate_additional_labels(batch)
-        loss_train = self.criterionLoss(output["left_g"] * batch["left_g_tobii_validity"].repeat(2,1).T , output_pred["left_g"] * batch["left_g_tobii_validity"].repeat(2,1).T ) + self.criterionLoss(output["right_g"] * batch["right_g_tobii_validity"].repeat(2,1).T, output_pred["right_g"] * batch["right_g_tobii_validity"].repeat(2,1).T)
-        
         self.calculate_g_with_two_eyes(batch,output)
-        self.calculate_g_with_two_eyes(batch,output_pred)
+
+        if self.opt.camera_frame_type == "eyes":
+            loss_train = self.criterionLoss(output["left_g"] * batch["left_g_tobii_validity"].repeat(2,1).T , output_pred["left_g"] * batch["left_g_tobii_validity"].repeat(2,1).T) + self.criterionLoss(output["right_g"] * batch["right_g_tobii_validity"].repeat(2,1).T, output_pred["right_g"] * batch["right_g_tobii_validity"].repeat(2,1).T)
+        
+            self.calculate_g_with_two_eyes(batch,output_pred)
+        else:
+            loss_train = self.criterionLoss(output["g"] * batch["g_validity"].repeat(2,1).T, output_pred["g"] * batch["g_validity"].repeat(2,1).T)
 
         validity = batch["left_g_tobii_validity"] * batch["right_g_tobii_validity"]
 
@@ -167,6 +169,7 @@ class EVEModel(BaseModel):
 
         output_pred = self(input)
         self.calculate_additional_labels(batch)
+        self.calculate_g_with_two_eyes(batch,output)
 
         validity = batch["g_validity"]
 
@@ -174,8 +177,10 @@ class EVEModel(BaseModel):
             'preds': output_pred, 'target': output, 'validity': validity
         }
         # print(batch.keys())
-        self.calculate_g_with_two_eyes(batch,output)
-        self.calculate_g_with_two_eyes(batch,output_pred)
+        if self.opt.camera_frame_type == "eyes":
+            self.calculate_g_with_two_eyes(batch, output_pred)
+        else:
+            self.calculate_pog_with_g(batch,output_pred)
         # print(output_pred['PoG_cm'][0], output['PoG_cm'][0])
         if batch_idx % self.opt.visual_freq == 0:
             
@@ -255,11 +260,29 @@ class EVEModel(BaseModel):
                 input['left_R'],  # by definition, 'left_R' == 'right_R'
                 input['camera_transformation'],
             )
+    
+    def calculate_pog_with_g(self, input, output, output_suffix = ""):
+        # Step 1) Calculate PoG from given gaze
+        
+        origin = input['o']
+               
+        direction = output['g' + output_suffix]
+        rotation = input['left_R']
+                        
+        PoG_mm, PoG_px = to_screen_coordinates(origin, direction, rotation, input)
+        output['PoG_cm' + output_suffix] = 0.1 * PoG_mm
+        output['PoG_px' + output_suffix] = PoG_px
+
+        output['PoG_mm' + output_suffix] = \
+            10.0 * output['PoG_cm' + output_suffix]
+
+
+
 
 
     def calculate_additional_labels(self, full_input_dict, current_epoch=None):
-        sample_entry = next(iter(full_input_dict.values()))
-        batch_size = sample_entry.shape[0]
+        # sample_entry = next(iter(full_input_dict.values()))
+        # batch_size = sample_entry.shape[0]
         
 
         # PoG in mm
